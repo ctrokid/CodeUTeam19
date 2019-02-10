@@ -1,0 +1,7 @@
+# https://docs.travis-ci.com/user/tutorial/
+
+language: java
+
+script:
+  - mvn test
+  - mvn checkstyle:check
