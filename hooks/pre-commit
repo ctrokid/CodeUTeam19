@@ -1,2 +1,2 @@
 #!/bin/bash -e
-mvn checkstyle:check
+mvn clean test checkstyle:check

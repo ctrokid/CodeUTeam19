@@ -1,4 +1,16 @@
-# codeu-starter-project
+# Team 19 CodeU Project
+
+# Tests
+We use Java's junit for testing. This is optional if you want to learn about testing.
+Open up `src/test/java/com/google/codeu/data/MessageTest.java` for a simple example.
+[junit documentation](http://junit.sourceforge.net/javadoc/)
+
+To execute the tests:
+
+`mvn test`
+
+The tests will also get run when we open Pull Requests, and whenever you push
+something to the Git server.
 
 # Checkystle linter
 We are using a linter to ensure standard formatting and consistency with our
