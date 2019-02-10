@@ -1,7 +1,5 @@
 package com.google.codeu.data;
 
-import java.time.Instant;
-import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;
 
