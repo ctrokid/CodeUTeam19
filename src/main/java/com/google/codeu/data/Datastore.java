@@ -76,7 +76,26 @@ public class Datastore {
         e.printStackTrace();
       }
     }
+    return messages;
+  }
 
+  /**
+   * Gets all messages posted.
+   *
+   * @return a list of messages posted, or empty list if user has never posted a
+   *     message. List is sorted by user and time descending.
+   */
+  public List<Message> getAllMessages() {
+    List<Message> messages = new ArrayList<>();
+
+    Query query = new Query("Message")
+        .addSort("user", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      String user = (String) entity.getProperty("user");
+      messages.addAll(getMessages(user));
+    }
     return messages;
   }
 }
