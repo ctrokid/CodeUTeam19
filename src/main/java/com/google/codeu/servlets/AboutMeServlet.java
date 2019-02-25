@@ -58,7 +58,7 @@ public class AboutMeServlet extends HttpServlet {
     String userEmail = userService.getCurrentUser().getEmail();
 
     System.out.println("Saving about me for " + userEmail);
-    // TODO: save the data
+    // TODO: save the data(Saulo)
 
     response.sendRedirect("/user-page.html?user=" + userEmail);
   }
