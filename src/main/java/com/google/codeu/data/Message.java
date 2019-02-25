@@ -28,7 +28,8 @@ public class Message {
   private String recipient;
 
   /**
-   * Constructs a new {@link Message} sent by {@code user} with {@code text} content to {@code recipient}.
+   * Constructs a new {@link Message} sent by {@code user} with {@code text} content
+   * to {@code recipient}.
    * Generates a random ID and uses the current system time for the creation time.
    */
   public Message(String user, String text, String recipient) {
@@ -36,7 +37,8 @@ public class Message {
   }
 
   /**
-   * Constructs a new {@link Message} sent by {@code user} with {@code text} content to {@code recipient}.
+   * Constructs a new {@link Message} sent by {@code user} with {@code text} content
+   * to {@code recipient}.
    * The {@code id} and {@code timestamp} are used to represent the message creation.
    */
   public Message(UUID id, String user, String text, long timestamp, String recipient) {
@@ -47,7 +49,7 @@ public class Message {
     this.recipient = recipient;
   }
 
-  public String getRecipient(){
+  public String getRecipient() {
     return recipient;
   }
 
