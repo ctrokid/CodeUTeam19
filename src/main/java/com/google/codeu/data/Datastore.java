@@ -42,6 +42,7 @@ public class Datastore {
     messageEntity.setProperty("user", message.getUser());
     messageEntity.setProperty("text", message.getText());
     messageEntity.setProperty("timestamp", message.getTimestamp());
+    messageEntity.setProperty("recipient", message.getRecipient());
 
     datastore.put(messageEntity);
   }
@@ -68,7 +69,8 @@ public class Datastore {
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
 
-        Message message = new Message(id, user, text, timestamp);
+        String recipient = (String) entity.getProperty("recipient");
+        Message message = new Message(id, user, text, timestamp, recipient);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
@@ -76,7 +78,26 @@ public class Datastore {
         e.printStackTrace();
       }
     }
+    return messages;
+  }
 
+  /**
+   * Gets all messages posted.
+   *
+   * @return a list of messages posted, or empty list if user has never posted a
+   *     message. List is sorted by user and time descending.
+   */
+  public List<Message> getAllMessages() {
+    List<Message> messages = new ArrayList<>();
+
+    Query query = new Query("Message")
+        .addSort("user", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      String user = (String) entity.getProperty("user");
+      messages.addAll(getMessages(user));
+    }
     return messages;
   }
 }
