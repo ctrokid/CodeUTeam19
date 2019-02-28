@@ -7,10 +7,10 @@ public class User {
 
   public User(String email, String aboutMe) {
     this.email = email;
-     this.aboutMe = aboutMe;
+    this.aboutMe = aboutMe;
   }
 
-  public String getEmail(){
+  public String getEmail() {
     return email;
   }
 
