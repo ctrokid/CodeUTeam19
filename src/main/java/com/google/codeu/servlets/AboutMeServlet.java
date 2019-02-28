@@ -1,24 +1,24 @@
 package com.google.codeu.servlets;
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
-import com.google.codeu.data.Datastore;
 import java.io.IOException;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.User;
-
 
 /**
  * Handles fetching and saving user data.
  */
 @WebServlet("/about")
 public class AboutMeServlet extends HttpServlet {
-  private Datastore datastore;
 
+  private Datastore datastore;
 
   @Override
   public void init() {
@@ -26,29 +26,33 @@ public class AboutMeServlet extends HttpServlet {
   }
 
   /**
-   * * Responds with the "about me" section for a particular user.
-   * */
+   * Responds with the "about me" section for a particular user.
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
-          throws IOException {
+      throws IOException {
 
     response.setContentType("text/html");
 
     String user = request.getParameter("user");
 
-    if (user == null || user.equals("")) {
+    if(user == null || user.equals("")) {
       // Request is invalid, return empty response
       return;
     }
 
-    String aboutMe = "This is " + user + "'s about me.";
+    User userData = datastore.getUser(user);
 
-    response.getOutputStream().println(aboutMe);
+    if(userData == null || userData.getAboutMe() == null) {
+      return;
+    }
+
+    response.getOutputStream().println(userData.getAboutMe());
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
-          throws IOException {
+      throws IOException {
 
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
@@ -64,5 +68,4 @@ public class AboutMeServlet extends HttpServlet {
 
     response.sendRedirect("/user-page.html?user=" + userEmail);
   }
-
 }
