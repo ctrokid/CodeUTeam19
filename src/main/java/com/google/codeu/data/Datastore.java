@@ -89,7 +89,6 @@ public class Datastore {
    */
   public List<Message> getAllMessages() {
     List<Message> messages = new ArrayList<>();
-
     Query query = new Query("Message")
         .addSort("user", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
@@ -103,8 +102,8 @@ public class Datastore {
   /** 
    *Stores the User in Datastore.
    */
+  
   public void storeUser(User user) {
-    
     Entity userEntity = new Entity("User", user.getEmail());
     userEntity.setProperty("email", user.getEmail());
     userEntity.setProperty("aboutMe", user.getAboutMe());
@@ -115,8 +114,7 @@ public class Datastore {
    * Returns the User owned by the email address, or
    * null if no matching User was found.
    */
-  public User getUser(String email) {
-    
+  public User getUser(String email) {  
     Query query = new Query("User")
             .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
     PreparedQuery results = datastore.prepare(query);
