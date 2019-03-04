@@ -103,7 +103,6 @@ public class Datastore {
   /** 
    *Stores the User in Datastore.
    */
-  
   public void storeUser(User user) {
     
     Entity userEntity = new Entity("User", user.getEmail());
@@ -117,7 +116,6 @@ public class Datastore {
    * null if no matching User was found.
    */
   public User getUser(String email) {
-
     Query query = new Query("User")
             .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
     PreparedQuery results = datastore.prepare(query);
