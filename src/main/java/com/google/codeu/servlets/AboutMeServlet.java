@@ -9,6 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 /**
  * Handles fetching and saving user data.
@@ -59,7 +61,7 @@ public class AboutMeServlet extends HttpServlet {
     }
 
     String userEmail = userService.getCurrentUser().getEmail();
-    String aboutMe = request.getParameter("about-me");
+    String aboutMe = Jsoup.clean(request.getParameter("about-me"), Whitelist.none());
 
     User user = new User(userEmail, aboutMe);
     datastore.storeUser(user);
