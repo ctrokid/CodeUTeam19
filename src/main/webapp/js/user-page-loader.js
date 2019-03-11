@@ -67,7 +67,6 @@ function showMessageFormIfLoggedIn() {
 
 /** Fetches messages and add them to the page. */
 function fetchMessages() {
-  const url = '/messages?user=' + parameterUsername;
   const parameterLanguage = urlParams.get('language');
   let url = '/messages?user=' + parameterUsername;
   if(parameterLanguage) {
@@ -135,6 +134,5 @@ function buildUI() {
   showMessageFormIfLoggedIn();
   fetchMessages();
   fetchAboutMe();
-  buildMessageDiv();
   buildLanguageLinks();
 }
