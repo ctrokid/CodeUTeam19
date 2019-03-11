@@ -80,6 +80,10 @@ public class MessageServlet extends HttpServlet {
     String recipient = request.getParameter("recipient");
 
 
+    String regex = "(https?://\\S+\\.(png|jpg|gif|bmp))";
+    String replacement = "<img src=\"$1\" />";
+    text = text.replaceAll(regex, replacement);
+
     Message message = new Message(user, text, recipient);
     datastore.storeMessage(message);
 
