@@ -128,7 +128,6 @@ function buildLanguageLinks(){
       userPageUrl + '&language=ar', 'Arabic')));
 }
 
-
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
