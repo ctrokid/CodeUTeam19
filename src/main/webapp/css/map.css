@@ -1,0 +1,8 @@
+/*
+ * Set the size and border color of the map
+ */
+#map{
+    width: 500px;
+    height: 500px;
+    border: thin solid black;
+}
