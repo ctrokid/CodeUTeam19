@@ -24,6 +24,7 @@ import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
+import com.google.codeu.data.Pair;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.List;
@@ -85,16 +86,22 @@ public class MessageServlet extends HttpServlet {
       response.sendRedirect("/index.html");
       return;
     }
-
-    String user = userService.getCurrentUser().getEmail();
+    
+    final String user = userService.getCurrentUser().getEmail();
     //Cleans the user input
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
-    String recipient = request.getParameter("recipient");
+    final String recipient = request.getParameter("recipient");
 
 
-    String regex = "(https?://\\S+\\.(png|jpg|gif|bmp))";
-    String replacement = "<img src=\"$1\" />";
-    text = text.replaceAll(regex, replacement);
+    Pair<Integer> captionRange = captionValidator(text);
+    Pair<Integer> urlRange = urlValidator(text);
+    if (captionRange == null) {
+      captionRange = new Pair<>(0,0);
+    }
+    if (urlRange == null) {
+      urlRange = new Pair<>(0,0);
+    }
+    text = messageFormat(text,captionRange,urlRange);
 
     Message message = new Message(user, text, recipient);
     datastore.storeMessage(message);
@@ -115,4 +122,107 @@ public class MessageServlet extends HttpServlet {
       message.setText(translatedText);
     }
   }
+
+  /**
+   *
+   * @param message receive the raw string message entered by the user.
+   * @return null if url is invalid, otherwise return start and end point of url.
+   */
+  private Pair<Integer> urlValidator(String message) {
+    int i = -1;
+    boolean containS = true;
+    i = message.indexOf("https://");
+    if (i == -1) {
+      i = message.indexOf("http://");
+      containS = false;
+    }
+    if (i == -1) {
+      return null;
+    }
+    int start = containS ? 8 : 7;
+    start += i;
+
+    String [] ext = {".jpg",".png",".gif",".bpm"};
+    int end = -1;
+    String urlExt = "";
+    for (String s : ext) {
+      end = message.indexOf(s,i);
+      if (end != -1) {
+        urlExt = s;
+        break;
+      }
+    }
+    char prior = message.charAt(start);
+    if (prior == '.' || prior == '/') {
+      return null;
+    }
+
+    for (int j = start + 1; j < end; j++) {
+      char actual = message.charAt(j);
+      if (actual == '.' || actual == '/') {
+        if (prior == '.' || prior == '/') {
+          return null;
+        }
+      }
+      prior = actual;
+    }
+    return new Pair<>(i,end + urlExt.length());
+  }
+
+  /**
+   *
+   * @param message receive the raw string message entered by the user.
+   * @return null if caption is invalid, otherwise return start and end point of caption.
+   */
+  private Pair<Integer> captionValidator(String message) {
+    int i = -1;
+    i = message.indexOf("![");
+    if (i == -1) {
+      return null;
+    }
+    int end = message.indexOf("]", i);
+    if (end == -1) {
+      return null;
+    }
+    return new Pair<>(i + 2,end);
+  }
+
+  /**
+   *
+   * @param msg receive the message containing the raw text.
+   * @param capInterv receive the interval containing the caption fo the image.
+   * @param urlInterv receive the interval containing the ulr of the image.
+   * @return message formated with the HTML code to show caption and image.
+   */
+  private String messageFormat(String msg, Pair<Integer> capInterv, Pair<Integer> urlInterv) {
+    String result = "";
+    int endOfText = Math.min(capInterv.getKey(),urlInterv.getKey());
+    if (endOfText == 0) {
+      endOfText = Math.max(capInterv.getKey(),urlInterv.getKey());
+    }
+    if (endOfText == 0) {
+      return msg;
+    }
+    if (capInterv.getValue() - capInterv.getKey() != 0) {
+      result += msg.substring(0, endOfText - 2);
+    } else {
+      result += msg.substring(0, endOfText);
+    }
+    result += "<figure> ";
+    String caption = "";
+    if (capInterv.getValue() - capInterv.getKey() != 0) {
+      caption = "<figcaption> ";
+      caption = caption + msg.substring(capInterv.getKey(), capInterv.getValue());
+      caption = caption + " </figcaption> ";
+    }
+    String image = "";
+    if (urlInterv.getValue() - urlInterv.getKey() != 0) {
+      image = "<img src=\"";
+      image = image + msg.substring(urlInterv.getKey(), urlInterv.getValue());
+      image = image + "\"/>";
+    }
+    result += image + caption + "</figure>";
+    return result;
+  }
+
 }
