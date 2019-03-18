@@ -86,8 +86,9 @@ public class MessageServlet extends HttpServlet {
       response.sendRedirect("/index.html");
       return;
     }
-
+    
     final String user = userService.getCurrentUser().getEmail();
+    //Cleans the user input
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
     final String recipient = request.getParameter("recipient");
 
