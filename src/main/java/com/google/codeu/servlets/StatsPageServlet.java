@@ -1,9 +1,8 @@
 package com.google.codeu.servlets;
 
-import java.io.IOException;
-
 import com.google.codeu.data.Datastore;
 import com.google.gson.JsonObject;
+import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
