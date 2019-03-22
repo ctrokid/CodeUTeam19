@@ -77,8 +77,6 @@ function fetchImageUploadUrlAndShowForm() {
 });
 }
 
-//END NEW VERSION
-
 /** Fetches messages and add them to the page. */
 function fetchMessages() {
   const parameterLanguage = urlParams.get('language');

@@ -50,6 +50,20 @@ public class Message {
     this.recipient = recipient;
   }
 
+  /**
+   * Constructs a new {@link Message} sent by {@code user} with {@code text} content
+   * to {@code recipient}.
+   * The {@code id} and {@code timestamp} are used to represent the message creation.
+   */
+  public Message(UUID id, String user, String text, long timestamp, String recipient, String imageUrl) {
+    this.id = id;
+    this.user = user;
+    this.text = text;
+    this.timestamp = timestamp;
+    this.recipient = recipient;
+    this.imageUrl = imageUrl;
+  }
+
   public String getRecipient() {
     return recipient;
   }
