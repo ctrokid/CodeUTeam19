@@ -55,7 +55,8 @@ public class Message {
    * to {@code recipient}.
    * The {@code id} and {@code timestamp} are used to represent the message creation.
    */
-  public Message(UUID id, String user, String text, long timestamp, String recipient, String imageUrl) {
+  public Message(UUID id, String user, String text, long timestamp, String recipient,
+                 String imageUrl) {
     this.id = id;
     this.user = user;
     this.text = text;
@@ -88,7 +89,11 @@ public class Message {
     this.text = text;
   }
 
-  public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
 
-  public String getImageUrl() { return imageUrl; }
+  public String getImageUrl() {
+    return imageUrl;
+  }
 }
