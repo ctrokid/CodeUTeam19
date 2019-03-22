@@ -50,6 +50,8 @@ function fetchAboutMe(){
 /**
  * Shows the message form if the user is logged in.
  */
+
+/* OLD Version
 function showMessageFormIfLoggedIn() {
   fetch('/login-status')
       .then((response) => {
@@ -64,6 +66,38 @@ function showMessageFormIfLoggedIn() {
       });
   document.getElementById('about-me-form').classList.remove('hidden');
 }
+*/
+
+//NEW VERSION
+
+function showMessageFormIfLoggedIn() {
+    fetch('/login-status')
+        .then((response) => {
+        return response.json();
+})
+.then((loginStatus) => {
+        if (loginStatus.isLoggedIn &&
+    loginStatus.username == parameterUsername) {
+        fetchImageUploadUrlAndShowForm();
+    }
+});
+    document.getElementById('about-me-form').classList.remove('hidden');
+}
+
+function fetchImageUploadUrlAndShowForm() {
+    fetch('/image-upload-url')
+        .then((response) => {
+        return response.text();
+})
+.then((imageUploadUrl) => {
+        const messageForm = document.getElementById('message-form');
+    messageForm.action = imageUploadUrl;
+    messageForm.classList.remove('hidden');
+    document.getElementById('recipientInput').value = parameterUsername;
+});
+}
+
+//END NEW VERSION
 
 /** Fetches messages and add them to the page. */
 function fetchMessages() {
