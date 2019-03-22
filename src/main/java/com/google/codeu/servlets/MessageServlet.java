@@ -16,6 +16,10 @@
 
 package com.google.codeu.servlets;
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.images.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.cloud.translate.Translate;
@@ -27,6 +31,7 @@ import com.google.codeu.data.Message;
 import com.google.codeu.data.Pair;
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.util.Map;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -73,7 +78,6 @@ public class MessageServlet extends HttpServlet {
 
     Gson gson = new Gson();
     String json = gson.toJson(messages);
-
     response.getWriter().println(json);
   }
 
@@ -102,7 +106,23 @@ public class MessageServlet extends HttpServlet {
     }
     text = messageFormat(text,captionRange,urlRange);
 
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get("image");
+
     Message message = new Message(user, text, recipient);
+
+    if(blobKeys != null && !blobKeys.isEmpty()) {
+      BlobKey blobKey = blobKeys.get(0);
+      ImagesService imagesService = ImagesServiceFactory.getImagesService();
+      ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
+      String imageUrl = imagesService.getServingUrl(options);
+      message.setImageUrl(imageUrl);
+    }
+
+    System.out.print("URL: ");
+    System.out.println(message.getImageUrl()+"\n");
+
     datastore.storeMessage(message);
 
     response.sendRedirect("/user-page.html?user=" + recipient);
@@ -115,7 +135,7 @@ public class MessageServlet extends HttpServlet {
       String originalText = message.getText();
 
       Translation translation = translate.translate(
-                originalText, TranslateOption.targetLanguage(targetLanguageCode));
+          originalText, TranslateOption.targetLanguage(targetLanguageCode));
       String translatedText = translation.getTranslatedText();
 
       message.setText(translatedText);
@@ -223,5 +243,4 @@ public class MessageServlet extends HttpServlet {
     result += image + caption + "</figure>";
     return result;
   }
-
 }
