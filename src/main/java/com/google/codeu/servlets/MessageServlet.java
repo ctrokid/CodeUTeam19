@@ -89,7 +89,7 @@ public class MessageServlet extends HttpServlet {
     
     final String user = userService.getCurrentUser().getEmail();
     //Cleans the user input
-    String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+    String text = Jsoup.clean(request.getParameter("text"), Whitelist.basicWithImages());
     final String recipient = request.getParameter("recipient");
 
 
