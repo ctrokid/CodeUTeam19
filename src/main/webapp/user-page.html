@@ -23,6 +23,7 @@ limitations under the License.
     <link rel="stylesheet" href="/css/user-page.css">
     <script src="/js/user-page-loader.js"></script>
     <script src="/js/navigation-loader.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
   </head>
   <body onload="buildUI(); buildLanguageLinks();">
     <nav>
@@ -46,6 +47,10 @@ limitations under the License.
       Enter a new message:
       <br/>
       <textarea name="text" id="message-input"></textarea>
+      <script>
+        const config = {removePlugins: [ 'Heading', 'List' ]};
+        ClassicEditor.create(document.getElementById('message-input'), config );
+      </script>
       <br/>
       <input type="submit" value="Submit">
     </form>
