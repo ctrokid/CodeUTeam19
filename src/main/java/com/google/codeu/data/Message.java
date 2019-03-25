@@ -26,6 +26,7 @@ public class Message {
   private String text;
   private long timestamp;
   private String recipient;
+  private String imageUrl;
 
   /**
    * Constructs a new {@link Message} sent by {@code user} with {@code text} content
@@ -47,6 +48,21 @@ public class Message {
     this.text = text;
     this.timestamp = timestamp;
     this.recipient = recipient;
+  }
+
+  /**
+   * Constructs a new {@link Message} sent by {@code user} with {@code text} content
+   * to {@code recipient}.
+   * The {@code id} and {@code timestamp} are used to represent the message creation.
+   */
+  public Message(UUID id, String user, String text, long timestamp, String recipient,
+                 String imageUrl) {
+    this.id = id;
+    this.user = user;
+    this.text = text;
+    this.timestamp = timestamp;
+    this.recipient = recipient;
+    this.imageUrl = imageUrl;
   }
 
   public String getRecipient() {
@@ -71,5 +87,13 @@ public class Message {
 
   public void setText(String text) {
     this.text = text;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
   }
 }
