@@ -42,7 +42,7 @@ limitations under the License.
         <input type="submit" value="Submit">
       </form>
     </div>
-    <form id="message-editor" action="/messages" method="POST" class="hidden">
+    <form id="message-form" class="hidden" method="POST" enctype="multipart/form-data">
       Enter a new message:
       <br/>
       <textarea name="text" id="message-input"></textarea>
@@ -50,13 +50,6 @@ limitations under the License.
         const config = {removePlugins: [ 'Heading', 'List' ]};
         ClassicEditor.create(document.getElementById('message-input'), config );
       </script>
-      <br/>
-      <input type="submit" value="Submit">
-    </form>
-    <form id="message-form" class="hidden" method="POST" enctype="multipart/form-data">
-      Enter a new message:
-      <br/>
-      <textarea name="text" id="message-input"></textarea>
       <br/>
       Add an image to your message:
       <input type="file" name="image">
