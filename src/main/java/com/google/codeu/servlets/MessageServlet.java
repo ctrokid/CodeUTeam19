@@ -93,10 +93,8 @@ public class MessageServlet extends HttpServlet {
       return;
     }    
     final String user = userService.getCurrentUser().getEmail();
-    //Cleans the user input
-    String text = Jsoup.clean(request.getParameter("text"), Whitelist.basicWithImages());
+    String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
     final String recipient = request.getParameter("recipient");
-
 
     Pair<Integer> captionRange = captionValidator(text);
     Pair<Integer> urlRange = urlValidator(text);
@@ -121,10 +119,6 @@ public class MessageServlet extends HttpServlet {
       String imageUrl = imagesService.getServingUrl(options);
       message.setImageUrl(imageUrl);
     }
-
-    System.out.print("URL: ");
-    System.out.println(message.getImageUrl() + "\n");
-
     datastore.storeMessage(message);
 
     response.sendRedirect("/user-page.html?user=" + recipient);
