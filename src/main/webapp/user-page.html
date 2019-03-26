@@ -33,7 +33,6 @@ limitations under the License.
       <ul id="languages"></ul>
     </nav>
     <h1 id="page-title">User Page</h1>
-
     <div id="about-me-container">Loading...</div>
     <div id="about-me-form" class="hidden">
       <form action="/about" method="POST">
@@ -42,7 +41,7 @@ limitations under the License.
         <input type="submit" value="Submit">
       </form>
     </div>
-    <form id="message-editor" action="/messages" method="POST" class="hidden">
+    <form id="message-form" class="hidden" method="POST" enctype="multipart/form-data">
       Enter a new message:
       <br/>
       <textarea name="text" id="message-input"></textarea>
@@ -51,23 +50,13 @@ limitations under the License.
         ClassicEditor.create(document.getElementById('message-input'), config );
       </script>
       <br/>
-      <input type="submit" value="Submit">
-    </form>
-    <form id="message-form" class="hidden" method="POST" enctype="multipart/form-data">
-      Enter a new message:
-      <br/>
-      <textarea name="text" id="message-input"></textarea>
-      <br/>
       Add an image to your message:
       <input type="file" name="image">
       <br/>
       <input type="hidden" value="" name="recipient" id="recipientInput">
       <input type="submit" value="Submit">
     </form>
-
     <hr/>
-
     <div id="message-container">Loading...</div>
-
   </body>
 </html>
