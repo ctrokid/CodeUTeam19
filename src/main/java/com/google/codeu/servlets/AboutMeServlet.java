@@ -61,6 +61,7 @@ public class AboutMeServlet extends HttpServlet {
     }
 
     String userEmail = userService.getCurrentUser().getEmail();
+    //Cleans the user input
     String aboutMe = Jsoup.clean(request.getParameter("about-me"), Whitelist.none());
 
     User user = new User(userEmail, aboutMe);
