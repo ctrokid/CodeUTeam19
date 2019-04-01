@@ -21,4 +21,52 @@ public class Event implements ScheduleItem {
     this.endTime = endTime;
     this.priorityLevel = priorityLevel;
   }
+
+  public Time getStartTime() {
+    return startTime;
+  }
+
+  public Time getEndTime() {
+    return endTime;
+  }
+
+  public int getPriorityLevel() {
+    return priorityLevel;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public List<User> getCollaborators() {
+    return collaborators;
+  }
+
+  public String getLocation() {
+    return location;
+  }
+
+  public void setStartTime(Time startTime) {
+    this.startTime = startTime;
+  }
+
+  public void setEndTime(Time endTime) {
+    this.endTime = endTime;
+  }
+
+  public void setPriorityLevel(int priorityLevel) {
+    this.priorityLevel = priorityLevel;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setCollaborators(List<User> collaborators) {
+    this.collaborators = collaborators;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
 }

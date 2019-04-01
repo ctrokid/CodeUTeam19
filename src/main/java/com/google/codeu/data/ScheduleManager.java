@@ -12,4 +12,12 @@ public class ScheduleManager {
   public ScheduleManager() {
     this.schedule = new ArrayList<>();
   }
+
+  public List<ScheduleItem> getSchedule() {
+    return schedule;
+  }
+
+  public void setSchedule(List<ScheduleItem> schedule) {
+    this.schedule = schedule;
+  }
 }

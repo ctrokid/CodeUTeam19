@@ -16,5 +16,59 @@ public class Course implements ScheduleItem {
     this.endTime = endTime;
   }
 
+  public Time getStartTime() {
+    return startTime;
+  }
 
+  public Time getEndTime() {
+    return endTime;
+  }
+
+  public List<String> getDaysOfWeek() {
+    return daysOfWeek;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public String getGrade() {
+    return grade;
+  }
+
+  public String getLocation() {
+    return location;
+  }
+
+  public List<Assignment> getAssignments() {
+    return assignments;
+  }
+
+  public void setStartTime(Time startTime) {
+    this.startTime = startTime;
+  }
+
+  public void setEndTime(Time endTime) {
+    this.endTime = endTime;
+  }
+
+  public void setDaysOfWeek(List<String> daysOfWeek) {
+    this.daysOfWeek = daysOfWeek;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setGrade(String grade) {
+    this.grade = grade;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  public void setAssignments(List<Assignment> assignments) {
+    this.assignments = assignments;
+  }
 }
