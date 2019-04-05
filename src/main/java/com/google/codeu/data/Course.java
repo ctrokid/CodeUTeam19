@@ -5,7 +5,7 @@ import java.util.List;
 public class Course implements ScheduleItem {
   private Time startTime;
   private Time endTime;
-  private List<String> daysOfWeek;
+  private List<Days> daysOfWeek;
   private String description;
   private String grade;
   private String location;
@@ -24,7 +24,7 @@ public class Course implements ScheduleItem {
     return endTime;
   }
 
-  public List<String> getDaysOfWeek() {
+  public List<Days> getDaysOfWeek() {
     return daysOfWeek;
   }
 
@@ -52,7 +52,7 @@ public class Course implements ScheduleItem {
     this.endTime = endTime;
   }
 
-  public void setDaysOfWeek(List<String> daysOfWeek) {
+  public void setDaysOfWeek(List<Days> daysOfWeek) {
     this.daysOfWeek = daysOfWeek;
   }
 
