@@ -3,21 +3,24 @@ package com.google.codeu.data;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class contains a schedule for an individual user, and contains methods to manage a schedule.
+ */
 public class ScheduleManager {
-  private List<ScheduleItem> schedule;
+  private Schedule schedule;
 
   /**
    * Create a new ScheduleManager.
    */
   public ScheduleManager() {
-    this.schedule = new ArrayList<>();
+
   }
 
-  public List<ScheduleItem> getSchedule() {
+  public Schedule Schedule() {
     return schedule;
   }
 
-  public void setSchedule(List<ScheduleItem> schedule) {
+  public void setSchedule(Schedule schedule) {
     this.schedule = schedule;
   }
 }
