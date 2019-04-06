@@ -1,6 +1,6 @@
 package com.google.codeu.data;
 
-public class Assignment implements ScheduleItem {
+public class Assignment {
   private String dueDate;
   private Course course;
   private boolean completed;

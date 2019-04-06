@@ -57,8 +57,18 @@ public class Datastore {
   }
 
   /** Stores the Message in Datastore. */
-  public void storeEvent(Message message) {
-    Entity messageEntity = new Entity("Message", message.getId().toString());
+  public void storeEvent(ItemSchedule itemSchedule) {
+
+    String kind = "";
+    if(itemSchedule instanceof Course) { kind = "Course"; }
+    else if (itemSchedule instanceof Task) { kind = "Task"; }
+    else { kind = "Event"; }
+
+    Entity itemScheduleEntity = new Entity(kind, itemSchedule.getId().toString());
+    itemScheduleEntity.setProperty("startTime",itemSchedule.getStartTime());
+
+
+    /*
     messageEntity.setProperty("user", message.getUser());
     messageEntity.setProperty("text", message.getText());
     messageEntity.setProperty("timestamp", message.getTimestamp());
@@ -66,8 +76,10 @@ public class Datastore {
     if (message.getImageUrl() != null) {
       messageEntity.setProperty("imageUrl", message.getImageUrl());
     }
+    */
 
-    datastore.put(messageEntity);
+    //Iterable needed
+    //datastore.put()
   }
 
   /**

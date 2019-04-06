@@ -18,13 +18,4 @@ public class ScheduleManager {
   public Schedule Schedule() {
     return schedule;
   }
-
-
-  public List<ScheduleItem> getSchedule() {
-    return schedule;
-  }
-
-  public void setSchedule(List<ScheduleItem> schedule) {
-    this.schedule = schedule;
-  }
 }
