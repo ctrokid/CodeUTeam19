@@ -68,6 +68,7 @@ public class Task implements ScheduleItem {
   }
 
   public void setLocation(Location location) {
+
     this.location = location;
   }
 

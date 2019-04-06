@@ -8,7 +8,9 @@ public class Course implements ScheduleItem {
   private List<Days> daysOfWeek;
   private String description;
   private String grade;
+
   private Location location;
+
   private List<Assignment> assignments;
 
   public Course(Time startTime, Time endTime) {

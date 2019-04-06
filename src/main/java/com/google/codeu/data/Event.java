@@ -8,7 +8,9 @@ public class Event implements ScheduleItem {
   private int priorityLevel;
   private String description;
   private List<User> collaborators;
+
   private Location location;
+
 
   /**
    * Create a new Event.
@@ -65,7 +67,7 @@ public class Event implements ScheduleItem {
   public void setCollaborators(List<User> collaborators) {
     this.collaborators = collaborators;
   }
-
+  
   public void setLocation(Location location) {
     this.location = location;
   }

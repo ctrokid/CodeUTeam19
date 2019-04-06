@@ -8,7 +8,6 @@ import java.util.List;
  */
 public class ScheduleManager {
   private Schedule schedule;
-
   /**
    * Create a new ScheduleManager.
    */
@@ -20,7 +19,12 @@ public class ScheduleManager {
     return schedule;
   }
 
-  public void setSchedule(Schedule schedule) {
+
+  public List<ScheduleItem> getSchedule() {
+    return schedule;
+  }
+
+  public void setSchedule(List<ScheduleItem> schedule) {
     this.schedule = schedule;
   }
 }
