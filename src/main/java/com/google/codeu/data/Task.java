@@ -8,7 +8,7 @@ public class Task implements ScheduleItem {
   private int priorityLevel;
   private String description;
   private List<User> collaborators;
-  private String location;
+  private Location location;
   private boolean completed;
 
   /**
@@ -63,11 +63,11 @@ public class Task implements ScheduleItem {
     this.collaborators = collaborators;
   }
 
-  public String getLocation() {
+  public Location getLocation() {
     return location;
   }
 
-  public void setLocation(String location) {
+  public void setLocation(Location location) {
     this.location = location;
   }
 

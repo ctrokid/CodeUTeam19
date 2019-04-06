@@ -8,7 +8,7 @@ public class Event implements ScheduleItem {
   private int priorityLevel;
   private String description;
   private List<User> collaborators;
-  private String location;
+  private Location location;
 
   /**
    * Create a new Event.
@@ -42,7 +42,7 @@ public class Event implements ScheduleItem {
     return collaborators;
   }
 
-  public String getLocation() {
+  public Location getLocation() {
     return location;
   }
 
@@ -66,7 +66,7 @@ public class Event implements ScheduleItem {
     this.collaborators = collaborators;
   }
 
-  public void setLocation(String location) {
+  public void setLocation(Location location) {
     this.location = location;
   }
 }

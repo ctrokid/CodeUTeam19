@@ -56,6 +56,20 @@ public class Datastore {
     datastore.put(messageEntity);
   }
 
+  /** Stores the Message in Datastore. */
+  public void storeEvent(Message message) {
+    Entity messageEntity = new Entity("Message", message.getId().toString());
+    messageEntity.setProperty("user", message.getUser());
+    messageEntity.setProperty("text", message.getText());
+    messageEntity.setProperty("timestamp", message.getTimestamp());
+    messageEntity.setProperty("recipient", message.getRecipient());
+    if (message.getImageUrl() != null) {
+      messageEntity.setProperty("imageUrl", message.getImageUrl());
+    }
+
+    datastore.put(messageEntity);
+  }
+
   /**
    * Gets messages sent to {@code recipient}.
    *

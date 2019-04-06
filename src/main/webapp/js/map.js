@@ -26,3 +26,13 @@ function addLandmark(map, lat, lng, title, description){
         infoWindow.open(map, marker);
     });
 }
+
+/** Creates a map centered at lat, lng*/
+function createMap(title, description, lat, lng){
+    const map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: lat, lng: lng},
+        zoom: 13.5
+    });
+
+    addLandmark(map, lat, lng, title, description);
+}
