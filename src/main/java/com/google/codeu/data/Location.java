@@ -27,7 +27,7 @@ public class Location {
     return lng;
   }
 
-  public String getName() {
+  public String getDescription() {
     return description;
   }
 

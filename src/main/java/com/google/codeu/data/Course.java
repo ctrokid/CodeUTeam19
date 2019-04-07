@@ -4,18 +4,19 @@ import java.util.List;
 import java.util.UUID;
 
 public class Course extends ItemSchedule {
+
   private List<Days> daysOfWeek;
   private String grade;
 
   private List<Assignment> assignments;
 
-  public Course(UUID id, Time startTime, Time endTime) {
+  public Course(UUID id, long startTime, long endTime) {
     this.id = id;
     this.startTime = startTime;
     this.endTime = endTime;
   }
 
-  public Course( Time startTime, Time endTime) {
+  public Course( long startTime, long endTime) {
     this.id = UUID.randomUUID();
     this.startTime = startTime;
     this.endTime = endTime;

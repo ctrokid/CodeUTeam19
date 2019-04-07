@@ -12,11 +12,11 @@ public class Task extends Event {
    * @param endTime end time of the task
    * @param priorityLevel priority level of the task
    */
-  public Task(Time startTime, Time endTime, int priorityLevel) {
+  public Task(long startTime, long endTime, int priorityLevel) {
     super(startTime,endTime,priorityLevel);
   }
 
-  public Task(UUID id, Time startTime, Time endTime, int priorityLevel) {
+  public Task(UUID id, long startTime, long endTime, int priorityLevel) {
     super(id,startTime,endTime,priorityLevel);
   }
 

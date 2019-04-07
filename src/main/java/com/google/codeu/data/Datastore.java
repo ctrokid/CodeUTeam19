@@ -56,30 +56,58 @@ public class Datastore {
     datastore.put(messageEntity);
   }
 
-  /** Stores the Message in Datastore. */
-  public void storeEvent(ItemSchedule itemSchedule) {
+  /** Stores the ItemSchedule in Datastore. */
+  public void storeItemSchedule(ItemSchedule itemSchedule) {
 
     String kind = "";
     if(itemSchedule instanceof Course) { kind = "Course"; }
     else if (itemSchedule instanceof Task) { kind = "Task"; }
     else { kind = "Event"; }
 
+    //Save ItemSchedule Properties
     Entity itemScheduleEntity = new Entity(kind, itemSchedule.getId().toString());
     itemScheduleEntity.setProperty("startTime",itemSchedule.getStartTime());
+    itemScheduleEntity.setProperty("endTime",itemSchedule.getEndTime());
+    itemScheduleEntity.setProperty("description",itemSchedule.getDescription());
 
-
-    /*
-    messageEntity.setProperty("user", message.getUser());
-    messageEntity.setProperty("text", message.getText());
-    messageEntity.setProperty("timestamp", message.getTimestamp());
-    messageEntity.setProperty("recipient", message.getRecipient());
-    if (message.getImageUrl() != null) {
-      messageEntity.setProperty("imageUrl", message.getImageUrl());
+    if(itemSchedule.location != null) {
+      itemScheduleEntity.setProperty("location_title", itemSchedule.getLocation().getTitle());
+      itemScheduleEntity.setProperty("location_description", itemSchedule.getLocation().getDescription());
+      itemScheduleEntity.setProperty("location_lat", itemSchedule.getLocation().getLat());
+      itemScheduleEntity.setProperty("location_lng", itemSchedule.getLocation().getLng());
+    } else {
+      itemScheduleEntity.setProperty("location_title", "");
+      itemScheduleEntity.setProperty("location_description", "");
+      itemScheduleEntity.setProperty("location_lat", 0.0);
+      itemScheduleEntity.setProperty("location_lng", 0.0);
     }
-    */
 
-    //Iterable needed
-    //datastore.put()
+    if(kind.equals("Course")) {
+      Course temp = (Course) itemSchedule;
+      String daysOfWeek = "";
+      int size = temp.getDaysOfWeek().size();
+      for (Days d : temp.getDaysOfWeek()) {
+        daysOfWeek = daysOfWeek + d.getValue();
+        if(size < 0) { daysOfWeek = daysOfWeek + " "; }
+        size--;
+      }
+      itemScheduleEntity.setProperty("daysOfWeek", daysOfWeek);
+      itemScheduleEntity.setProperty("grade", temp.getGrade());
+
+    } else {
+      Event temp = (Event) itemSchedule;
+      itemScheduleEntity.setProperty("priorityLevel", temp.getPriorityLevel());
+      itemScheduleEntity.setProperty("collaborators_size", temp.getCollaborators().size());
+      int i = 0;
+      for (User u : temp.getCollaborators()) {
+        itemScheduleEntity.setProperty(("collaborators_"+i), u.getEmail());
+        i++;
+      }
+      if(kind.equals("Task")) {
+        itemScheduleEntity.setProperty(("completed"), ((Task)itemSchedule).isCompleted());
+      }
+    }
+    datastore.put(itemScheduleEntity);
   }
 
   /**
