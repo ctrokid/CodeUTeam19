@@ -8,6 +8,7 @@ public abstract class ItemSchedule {
   protected long endTime;
   protected String description;
   protected Location location;
+  protected String creator;
 
   public long getStartTime() {
     return startTime;
@@ -27,6 +28,8 @@ public abstract class ItemSchedule {
 
   public UUID getId() { return id; }
 
+  public String getCreator() { return creator; }
+
   public void setStartTime(long startTime) {
     this.startTime = startTime;
   }
@@ -42,5 +45,4 @@ public abstract class ItemSchedule {
   public void setLocation(Location location) {
     this.location = location;
   }
-
 }

@@ -10,13 +10,15 @@ public class Course extends ItemSchedule {
 
   private List<Assignment> assignments;
 
-  public Course(UUID id, long startTime, long endTime) {
+  public Course(String creator, UUID id, long startTime, long endTime) {
+    this.creator = creator;
     this.id = id;
     this.startTime = startTime;
     this.endTime = endTime;
   }
 
-  public Course( long startTime, long endTime) {
+  public Course(String creator, long startTime, long endTime) {
+    this.creator = creator;
     this.id = UUID.randomUUID();
     this.startTime = startTime;
     this.endTime = endTime;

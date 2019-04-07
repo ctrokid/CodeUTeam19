@@ -28,11 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-//import com.google.appengine.api.datastore.FetchOptions;
-
 /** Provides access to the data stored in Datastore. */
-
-//public final class FetchOptions extends java.lang.Object;
 
 public class Datastore {
 
@@ -66,6 +62,7 @@ public class Datastore {
 
     //Save ItemSchedule Properties
     Entity itemScheduleEntity = new Entity(kind, itemSchedule.getId().toString());
+    itemScheduleEntity.setProperty("creator",itemSchedule.getCreator());
     itemScheduleEntity.setProperty("startTime",itemSchedule.getStartTime());
     itemScheduleEntity.setProperty("endTime",itemSchedule.getEndTime());
     itemScheduleEntity.setProperty("description",itemSchedule.getDescription());
@@ -110,6 +107,7 @@ public class Datastore {
     datastore.put(itemScheduleEntity);
   }
 
+
   /**
    * Gets messages sent to {@code recipient}.
    *
@@ -142,6 +140,64 @@ public class Datastore {
       }
     }
     return messages;
+  }
+
+  /**
+   * Gets messages sent to {@code recipient}.
+   *
+   * @return a list of itemSchedule sent to the recipient.
+   */
+  public List<ItemSchedule> getItemSchedule(String recipient) {
+
+    List<ItemSchedule> items = new ArrayList<>();
+    String [] kinds = {"Course","Event","Task"};
+    for (int i = 0; i < kinds.length ; i++) {
+      Query query =
+          new Query(kinds[i])
+              .setFilter(new Query.FilterPredicate("creator", FilterOperator.EQUAL, recipient))
+              .addSort("startTime", SortDirection.DESCENDING);
+      PreparedQuery results = datastore.prepare(query);
+      for (Entity entity : results.asIterable()) {
+        try {
+
+          //ItemSchedule
+          String idString = entity.getKey().getName();
+          UUID id = UUID.fromString(idString);
+          String creator = (String) entity.getProperty("creator");
+          long startTime = (long) entity.getProperty("startTime");
+          long endTime = (long) entity.getProperty("endTime");
+          String description = (String) entity.getProperty("description");
+
+          //Location
+          String location_title = (String) entity.getProperty("location_title");
+          String location_description = (String) entity.getProperty("location_description");
+          float location_lat = (float) entity.getProperty("location_lat");
+          float location_lng = (float) entity.getProperty("location_lng");
+
+          //Course
+          if(i == 0) {
+
+          } else {
+            //Event
+
+            //Task
+            if(i == 3) {
+
+            }
+          }
+
+          /*
+          Message message = new Message(id, user, text, timestamp, recipient, imageUrl);
+          messages.add(message);
+          */
+        } catch (Exception e) {
+          System.err.println("Error reading item.");
+          System.err.println(entity.toString());
+          e.printStackTrace();
+        }
+      }
+    }
+    return items;
   }
 
   /**

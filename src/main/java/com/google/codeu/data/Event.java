@@ -13,14 +13,16 @@ public class Event extends ItemSchedule {
    * @param endTime the end time of the event
    * @param priorityLevel the priority level of the event
    */
-  public Event(long startTime, long endTime, int priorityLevel) {
+  public Event(String creator, long startTime, long endTime, int priorityLevel) {
+    this.creator = creator;
     this.id = UUID.randomUUID();
     this.startTime = startTime;
     this.endTime = endTime;
     this.priorityLevel = priorityLevel;
   }
 
-  public Event(UUID id, long startTime, long endTime, int priorityLevel) {
+  public Event(String creator, UUID id, long startTime, long endTime, int priorityLevel) {
+    this.creator = creator;
     this.id = id;
     this.startTime = startTime;
     this.endTime = endTime;

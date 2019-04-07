@@ -3,8 +3,8 @@ package com.google.codeu.data;
 public class Location {
   private String description;
   private String title;
-  private double lat;
-  private double lng;
+  private float lat;
+  private float lng;
 
   /**
    *
@@ -12,18 +12,18 @@ public class Location {
    * @param lat Holds the latitude of the location.
    * @param lng Holds the longitude of the location.
    */
-  public Location(String title, String description, double lat, double lng) {
+  public Location(String title, String description, float lat, float lng) {
     this.title = title;
     this.description = description;
     this.lat = lat;
     this.lng = lng;
   }
 
-  public double getLat() {
+  public float getLat() {
     return lat;
   }
 
-  public double getLng() {
+  public float getLng() {
     return lng;
   }
 
