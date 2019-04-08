@@ -5,8 +5,15 @@ public class Assignment {
   private String course;
   private boolean completed;
 
-  public Assignment(String dueDate) {
+  public Assignment(String course, String dueDate) {
+    this.course = course;
     this.dueDate = dueDate;
+  }
+
+  public Assignment(String course, String dueDate, boolean completed) {
+    this.course = course;
+    this.dueDate = dueDate;
+    this.completed = completed;
   }
 
   public String getDueDate() {

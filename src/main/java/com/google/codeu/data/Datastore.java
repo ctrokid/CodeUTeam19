@@ -24,6 +24,8 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -88,6 +90,7 @@ public class Datastore {
         if(size_DaysOfWeek < 0) { daysOfWeek = daysOfWeek + " "; }
         size_DaysOfWeek--;
       }
+      itemScheduleEntity.setProperty("daysOfWeek", daysOfWeek);
       itemScheduleEntity.setProperty("course_assignments_size",temp.getAssignments().size());
       int i = 0;
       for (Assignment a : temp.getAssignments()) {
@@ -96,9 +99,7 @@ public class Datastore {
         itemScheduleEntity.setProperty("course_assignment_"+i+"_completed",a.isCompleted());
         i++;
       }
-      itemScheduleEntity.setProperty("daysOfWeek", daysOfWeek);
       itemScheduleEntity.setProperty("grade", temp.getGrade());
-
     } else {
       Event temp = (Event) itemSchedule;
       itemScheduleEntity.setProperty("priorityLevel", temp.getPriorityLevel());
@@ -156,7 +157,6 @@ public class Datastore {
    * @return a list of itemSchedule sent to the recipient.
    */
   public List<ItemSchedule> getItemSchedule(String recipient) {
-
     List<ItemSchedule> items = new ArrayList<>();
     String [] kinds = {"Course","Event","Task"};
     for (int i = 0; i < kinds.length ; i++) {
@@ -180,32 +180,57 @@ public class Datastore {
           String location_description = (String) entity.getProperty("location_description");
           float location_lat = (float) entity.getProperty("location_lat");
           float location_lng = (float) entity.getProperty("location_lng");
+          Location tempLocation = new Location(location_title,location_description,location_lat,location_lng);
 
           //Course
           if(i == 0) {
+            //Read Days of week
             ArrayList<Days> daysOfWeek = new ArrayList<>();
             String strDaysOfWeek = (String) entity.getProperty("daysOfWeek");
             for (String s : strDaysOfWeek.split(" ")) {
               daysOfWeek.add(Days.valueOf(s));
             }
-
             //Read Assignments
-
+            ArrayList<Assignment> assignments = new ArrayList<>();
+            int assignmentsSize = (int) entity.getProperty("course_assignments_size");
+            for (int j = 0 ; j < assignmentsSize; j++) {
+              String dueDate = (String) entity.getProperty("course_assignment_"+j+"_dueDate");
+              String course = (String) entity.getProperty("course_assignment_"+j+"_course");
+              boolean completed = (boolean) entity.getProperty("course_assignment_"+j+"completed");
+              assignments.add(new Assignment(course,dueDate,completed));
+            }
             String grade = (String) entity.getProperty("grade");
-            //Course course = new Course(cre)
+
+            Course tempCourse = new Course(creator,id,startTime,endTime);
+            tempCourse.setDaysOfWeek(daysOfWeek);
+            tempCourse.setAssignments(assignments);
+            tempCourse.setLocation(tempLocation);
+            items.add(tempCourse);
           } else {
             //Event
-
+            int priorityLevel = (int) entity.getProperty("priorityLevel");
+            int collaborators_size = (int) entity.getProperty("collaborators_size");
+            ArrayList<User> collaborators = new ArrayList<>();
+            for (int j = 0 ; j < collaborators_size; j++) {
+              String userEmail= (String) entity.getProperty("collaborators_"+j);
+              collaborators.add(new User(userEmail));
+            }
             //Task
             if(i == 3) {
-
+              boolean completed = (boolean) entity.getProperty("completed");
+              Task tempTask = new Task(creator,id,startTime,endTime,priorityLevel);
+              tempTask.setCollaborators(collaborators);
+              tempTask.setCompleted(completed);
+              tempTask.setLocation(tempLocation);
+              items.add(tempTask);
+            } else {
+              //Event
+              Event tempEvent = new Event(creator,id,startTime,endTime,priorityLevel);
+              tempEvent.setCollaborators(collaborators);
+              tempEvent.setLocation(tempLocation);
+              items.add(tempEvent);
             }
           }
-
-          /*
-          Message message = new Message(id, user, text, timestamp, recipient, imageUrl);
-          messages.add(message);
-          */
         } catch (Exception e) {
           System.err.println("Error reading item.");
           System.err.println(entity.toString());
