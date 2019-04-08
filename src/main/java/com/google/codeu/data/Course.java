@@ -1,5 +1,6 @@
 package com.google.codeu.data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +15,10 @@ public class Course extends ItemSchedule {
     this.id = id;
     this.startTime = startTime;
     this.endTime = endTime;
+
+    daysOfWeek = new ArrayList<>();
+    assignments = new ArrayList<>();
+    grade = "";
   }
 
   public Course(String creator, long startTime, long endTime) {
@@ -21,6 +26,10 @@ public class Course extends ItemSchedule {
     this.id = UUID.randomUUID();
     this.startTime = startTime;
     this.endTime = endTime;
+
+    daysOfWeek = new ArrayList<>();
+    assignments = new ArrayList<>();
+    grade = "";
   }
 
   public List<Days> getDaysOfWeek() {

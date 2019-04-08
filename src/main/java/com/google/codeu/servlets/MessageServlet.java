@@ -28,9 +28,7 @@ import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.Translate.TranslateOption;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
-import com.google.codeu.data.Datastore;
-import com.google.codeu.data.Message;
-import com.google.codeu.data.Pair;
+import com.google.codeu.data.*;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.List;
@@ -41,10 +39,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+//import sun.jvm.hotspot.ui.tree.FloatTreeNodeAdapter;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
 public class MessageServlet extends HttpServlet {
+
 
   private Datastore datastore;
 
@@ -72,6 +72,79 @@ public class MessageServlet extends HttpServlet {
 
     List<Message> messages = datastore.getMessages(user);
 
+    Gson gson = new Gson();
+    String json = gson.toJson(messages);
+    response.getWriter().println(json);
+  }
+
+  /** Stores a new {@link Message}. */
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) {
+      response.sendRedirect("/index.html");
+      return;
+    }
+    final String user = userService.getCurrentUser().getEmail();
+    String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+    final String recipient = request.getParameter("recipient");
+
+    Message message = new Message(user, text, recipient);
+    datastore.storeMessage(message);
+
+    testPostTask(text);
+
+    response.sendRedirect("/user-page.html?user=" + recipient);
+  }
+
+  private void testPostTask(String line) {
+    String[] split = line.split(" ");
+    String kind = split[0];
+    long startTime = Long.parseLong(split[1]);
+    long endTime = Long.parseLong(split[2]);
+    String desciption = split[3];
+    String locationDescipt = split[4];
+    String locationTitle = split[5];
+    float locationLat = Float.parseFloat(split[6]);
+    float locationLng = Float.parseFloat(split[7]);
+    String creator = split[8];
+    Course temp = new Course(creator,startTime,endTime);
+    temp.setLocation(new Location(locationTitle,locationDescipt,locationLat,locationLng));
+    datastore.storeItemSchedule(temp);
+  }
+
+  //#region OLD
+  /*
+
+  private Datastore datastore;
+
+  @Override
+  public void init() {
+    datastore = new Datastore();
+  }
+  */
+
+  /**
+   * Responds with a JSON representation of {@link Message} data for a specific user. Responds with
+   * an empty array if the user is not provided.
+   */
+  /*
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    response.setContentType("application/json");
+
+    String user = request.getParameter("user");
+
+    if (user == null || user.equals("")) {
+      // Request is invalid, return empty array
+      response.getWriter().println("[]");
+      return;
+    }
+
+    List<Message> messages = datastore.getMessages(user);
+
     String targetLanguageCode = request.getParameter("language");
 
     if (targetLanguageCode != null) {
@@ -82,8 +155,9 @@ public class MessageServlet extends HttpServlet {
     String json = gson.toJson(messages);
     response.getWriter().println(json);
   }
-
+  */
   /** Stores a new {@link Message}. */
+  /*
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -137,12 +211,14 @@ public class MessageServlet extends HttpServlet {
       message.setText(translatedText);
     }
   }
+  */
 
   /**
    *
    * @param message receive the raw string message entered by the user.
    * @return null if url is invalid, otherwise return start and end point of url.
    */
+  /*
   private Pair<Integer> urlValidator(String message) {
     int i = -1;
     boolean containS = true;
@@ -183,12 +259,13 @@ public class MessageServlet extends HttpServlet {
     }
     return new Pair<>(i,end + urlExt.length());
   }
-
+  /*
   /**
    *
    * @param message receive the raw string message entered by the user.
    * @return null if caption is invalid, otherwise return start and end point of caption.
    */
+  /*
   private Pair<Integer> captionValidator(String message) {
     int i = -1;
     i = message.indexOf("![");
@@ -201,7 +278,7 @@ public class MessageServlet extends HttpServlet {
     }
     return new Pair<>(i + 2,end);
   }
-
+  */
   /**
    *
    * @param msg receive the message containing the raw text.
@@ -209,6 +286,7 @@ public class MessageServlet extends HttpServlet {
    * @param urlInterv receive the interval containing the ulr of the image.
    * @return message formated with the HTML code to show caption and image.
    */
+  /*
   private String messageFormat(String msg, Pair<Integer> capInterv, Pair<Integer> urlInterv) {
     String result = "";
     int endOfText = Math.min(capInterv.getKey(),urlInterv.getKey());
@@ -239,4 +317,7 @@ public class MessageServlet extends HttpServlet {
     result += image + caption + "</figure>";
     return result;
   }
+  */
+  //endregion
+
 }

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Handles fetching all messages for the public feed.
+ * Handles fetching all schedule items for the public feed.
  */
 @WebServlet("/schedulefeed")
 public class ItemScheduleFeedServlet extends HttpServlet {
@@ -24,7 +24,7 @@ public class ItemScheduleFeedServlet extends HttpServlet {
   }
 
   /**
-   * Responds with a JSON representation of Message data for all users.
+   * Responds with a JSON representation of schedule items data for all users.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
