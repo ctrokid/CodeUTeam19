@@ -82,11 +82,19 @@ public class Datastore {
     if(kind.equals("Course")) {
       Course temp = (Course) itemSchedule;
       String daysOfWeek = "";
-      int size = temp.getDaysOfWeek().size();
+      int size_DaysOfWeek = temp.getDaysOfWeek().size();
       for (Days d : temp.getDaysOfWeek()) {
         daysOfWeek = daysOfWeek + d.getValue();
-        if(size < 0) { daysOfWeek = daysOfWeek + " "; }
-        size--;
+        if(size_DaysOfWeek < 0) { daysOfWeek = daysOfWeek + " "; }
+        size_DaysOfWeek--;
+      }
+      itemScheduleEntity.setProperty("course_assignments_size",temp.getAssignments().size());
+      int i = 0;
+      for (Assignment a : temp.getAssignments()) {
+        itemScheduleEntity.setProperty("course_assignment_"+i+"_dueDate",a.getDueDate());
+        itemScheduleEntity.setProperty("course_assignment_"+i+"_course",a.getCourse());
+        itemScheduleEntity.setProperty("course_assignment_"+i+"_completed",a.isCompleted());
+        i++;
       }
       itemScheduleEntity.setProperty("daysOfWeek", daysOfWeek);
       itemScheduleEntity.setProperty("grade", temp.getGrade());
@@ -159,7 +167,6 @@ public class Datastore {
       PreparedQuery results = datastore.prepare(query);
       for (Entity entity : results.asIterable()) {
         try {
-
           //ItemSchedule
           String idString = entity.getKey().getName();
           UUID id = UUID.fromString(idString);
@@ -176,7 +183,16 @@ public class Datastore {
 
           //Course
           if(i == 0) {
+            ArrayList<Days> daysOfWeek = new ArrayList<>();
+            String strDaysOfWeek = (String) entity.getProperty("daysOfWeek");
+            for (String s : strDaysOfWeek.split(" ")) {
+              daysOfWeek.add(Days.valueOf(s));
+            }
 
+            //Read Assignments
+
+            String grade = (String) entity.getProperty("grade");
+            //Course course = new Course(cre)
           } else {
             //Event
 

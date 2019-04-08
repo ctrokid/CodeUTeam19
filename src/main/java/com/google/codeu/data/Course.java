@@ -7,7 +7,6 @@ public class Course extends ItemSchedule {
 
   private List<Days> daysOfWeek;
   private String grade;
-
   private List<Assignment> assignments;
 
   public Course(String creator, UUID id, long startTime, long endTime) {

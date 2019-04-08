@@ -2,7 +2,7 @@ package com.google.codeu.data;
 
 public class Assignment {
   private String dueDate;
-  private Course course;
+  private String course;
   private boolean completed;
 
   public Assignment(String dueDate) {
@@ -17,11 +17,11 @@ public class Assignment {
     this.dueDate = dueDate;
   }
 
-  public Course getCourse() {
+  public String getCourse() {
     return course;
   }
 
-  public void setCourse(Course course) {
+  public void setCourse(String course) {
     this.course = course;
   }
 
