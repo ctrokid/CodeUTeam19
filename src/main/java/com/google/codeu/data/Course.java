@@ -18,6 +18,7 @@ public class Course extends ItemSchedule {
 
     daysOfWeek = new ArrayList<>();
     assignments = new ArrayList<>();
+    description = "";
     grade = "";
   }
 
@@ -29,6 +30,7 @@ public class Course extends ItemSchedule {
 
     daysOfWeek = new ArrayList<>();
     assignments = new ArrayList<>();
+    description = "";
     grade = "";
   }
 

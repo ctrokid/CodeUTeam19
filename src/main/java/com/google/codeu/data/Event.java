@@ -19,6 +19,7 @@ public class Event extends ItemSchedule {
     this.startTime = startTime;
     this.endTime = endTime;
     this.priorityLevel = priorityLevel;
+    description = "";
   }
 
   public Event(String creator, UUID id, long startTime, long endTime, int priorityLevel) {
@@ -27,6 +28,7 @@ public class Event extends ItemSchedule {
     this.startTime = startTime;
     this.endTime = endTime;
     this.priorityLevel = priorityLevel;
+    description = "";
   }
 
   public int getPriorityLevel() {

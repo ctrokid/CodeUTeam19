@@ -31,12 +31,14 @@ public class ItemScheduleFeedServlet extends HttpServlet {
       throws IOException {
 
     response.setContentType("application/json");
-    List<ItemSchedule> messages = datastore.getAllItemSchedule();
+    List<ItemSchedule> items = datastore.getAllItemSchedule();
+    response.getOutputStream().println(items.size());
     Gson gson = new Gson();
 
-    String json = gson.toJson(messages);
+    String json = gson.toJson(items);
     response.getOutputStream().println(json + "\n");
     response.getOutputStream().println("HELLO");
+    response.getOutputStream().println(datastore.getTotalItemScheduleCount());
 
   }
 }

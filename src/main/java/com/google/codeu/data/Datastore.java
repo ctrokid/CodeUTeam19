@@ -184,7 +184,7 @@ public class Datastore {
       int size_DaysOfWeek = temp.getDaysOfWeek().size();
       for (Days d : temp.getDaysOfWeek()) {
         daysOfWeek = daysOfWeek + d.getValue();
-        if(size_DaysOfWeek < 0) { daysOfWeek = daysOfWeek + " "; }
+        if(size_DaysOfWeek > 0) { daysOfWeek = daysOfWeek + " "; }
         size_DaysOfWeek--;
       }
       itemScheduleEntity.setProperty("daysOfWeek", daysOfWeek);
@@ -223,9 +223,9 @@ public class Datastore {
     String [] kinds = {"Course","Event","Task"};
     for (int i = 0; i < kinds.length ; i++) {
       Query query =
-          new Query(kinds[i])
-              .setFilter(new Query.FilterPredicate("creator", FilterOperator.EQUAL, user))
-              .addSort("startTime", SortDirection.DESCENDING);
+          new Query(kinds[i]);
+              //.setFilter(new Query.FilterPredicate("creator", FilterOperator.EQUAL, user))
+              //.addSort("startTime", SortDirection.DESCENDING);
       PreparedQuery results = datastore.prepare(query);
       for (Entity entity : results.asIterable()) {
         try {
@@ -240,8 +240,8 @@ public class Datastore {
           //Location
           String location_title = (String) entity.getProperty("location_title");
           String location_description = (String) entity.getProperty("location_description");
-          float location_lat = (float) entity.getProperty("location_lat");
-          float location_lng = (float) entity.getProperty("location_lng");
+          float location_lat = Float.parseFloat(entity.getProperty("location_lat").toString());
+          float location_lng = Float.parseFloat(entity.getProperty("location_lng").toString());
           Location tempLocation = new Location(location_title,location_description,location_lat,location_lng);
 
           //Course
@@ -250,22 +250,26 @@ public class Datastore {
             ArrayList<Days> daysOfWeek = new ArrayList<>();
             String strDaysOfWeek = (String) entity.getProperty("daysOfWeek");
             for (String s : strDaysOfWeek.split(" ")) {
-              daysOfWeek.add(Days.valueOf(s));
+              daysOfWeek.add(Days.getValueEnum(s));
             }
             //Read Assignments
+            /*
             ArrayList<Assignment> assignments = new ArrayList<>();
             int assignmentsSize = (int) entity.getProperty("course_assignments_size");
+            System.out.println(assignmentsSize);
             for (int j = 0 ; j < assignmentsSize; j++) {
+              System.out.println(j);
               String dueDate = (String) entity.getProperty("course_assignment_"+j+"_dueDate");
               String course = (String) entity.getProperty("course_assignment_"+j+"_course");
               boolean completed = (boolean) entity.getProperty("course_assignment_"+j+"completed");
               assignments.add(new Assignment(course,dueDate,completed));
             }
+            */
             String grade = (String) entity.getProperty("grade");
 
             Course tempCourse = new Course(creator,id,startTime,endTime);
             tempCourse.setDaysOfWeek(daysOfWeek);
-            tempCourse.setAssignments(assignments);
+            //tempCourse.setAssignments(assignments);
             tempCourse.setLocation(tempLocation);
             items.add(tempCourse);
           } else {
@@ -306,18 +310,18 @@ public class Datastore {
   public List<ItemSchedule> getAllItemSchedule() {
     ArrayList<ItemSchedule> items = new ArrayList<>();
 
-    Query query = new Query("Task")
-        .addSort("user", SortDirection.DESCENDING);
+    Query query = new Query("Task");
+        //.addSort("user", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
     items.addAll(getAllItemSchedule(results));
 
-    query = new Query("Course")
-        .addSort("user", SortDirection.DESCENDING);
+    query = new Query("Course");
+        //.addSort("user", SortDirection.DESCENDING);
     results = datastore.prepare(query);
     items.addAll(getAllItemSchedule(results));
 
-    query = new Query("Event")
-        .addSort("user", SortDirection.DESCENDING);
+    query = new Query("Event");
+        //.addSort("user", SortDirection.DESCENDING);
     results = datastore.prepare(query);
     items.addAll(getAllItemSchedule(results));
 
