@@ -1,14 +1,9 @@
 package com.google.codeu.data;
 
 import java.util.List;
+import java.util.UUID;
 
-public class Task implements ScheduleItem {
-  private Time startTime;
-  private Time endTime;
-  private int priorityLevel;
-  private String description;
-  private List<User> collaborators;
-  private String location;
+public class Task extends Event {
   private boolean completed;
 
   /**
@@ -17,58 +12,12 @@ public class Task implements ScheduleItem {
    * @param endTime end time of the task
    * @param priorityLevel priority level of the task
    */
-  public Task(Time startTime, Time endTime, int priorityLevel) {
-    this.startTime = startTime;
-    this.endTime = endTime;
-    this.priorityLevel = priorityLevel;
+  public Task(String creator,long startTime, long endTime, int priorityLevel) {
+    super(creator,startTime,endTime,priorityLevel);
   }
 
-  public Time getStartTime() {
-    return startTime;
-  }
-
-  public void setStartTime(Time startTime) {
-    this.startTime = startTime;
-  }
-
-  public Time getEndTime() {
-    return endTime;
-  }
-
-  public void setEndTime(Time endTime) {
-    this.endTime = endTime;
-  }
-
-  public int getPriorityLevel() {
-    return priorityLevel;
-  }
-
-  public void setPriorityLevel(int priorityLevel) {
-    this.priorityLevel = priorityLevel;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public List<User> getCollaborators() {
-    return collaborators;
-  }
-
-  public void setCollaborators(List<User> collaborators) {
-    this.collaborators = collaborators;
-  }
-
-  public String getLocation() {
-    return location;
-  }
-
-  public void setLocation(String location) {
-    this.location = location;
+  public Task(String creator,UUID id, long startTime, long endTime, int priorityLevel) {
+    super(creator,id,startTime,endTime,priorityLevel);
   }
 
   public boolean isCompleted() {
