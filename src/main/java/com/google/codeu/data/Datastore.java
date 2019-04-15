@@ -253,9 +253,8 @@ public class Datastore {
               daysOfWeek.add(Days.getValueEnum(s));
             }
             //Read Assignments
-            /*
             ArrayList<Assignment> assignments = new ArrayList<>();
-            int assignmentsSize = (int) entity.getProperty("course_assignments_size");
+            int assignmentsSize = ((Long) entity.getProperty("course_assignments_size")).intValue();
             System.out.println(assignmentsSize);
             for (int j = 0 ; j < assignmentsSize; j++) {
               System.out.println(j);
@@ -264,7 +263,6 @@ public class Datastore {
               boolean completed = (boolean) entity.getProperty("course_assignment_"+j+"completed");
               assignments.add(new Assignment(course,dueDate,completed));
             }
-            */
             String grade = (String) entity.getProperty("grade");
 
             Course tempCourse = new Course(creator,id,startTime,endTime);
@@ -274,8 +272,8 @@ public class Datastore {
             items.add(tempCourse);
           } else {
             //Event
-            int priorityLevel = (int) entity.getProperty("priorityLevel");
-            int collaborators_size = (int) entity.getProperty("collaborators_size");
+            int priorityLevel = ((Long) entity.getProperty("priorityLevel")).intValue();
+            int collaborators_size = ((Long)entity.getProperty("collaborators_size")).intValue();
             ArrayList<User> collaborators = new ArrayList<>();
             for (int j = 0 ; j < collaborators_size; j++) {
               String userEmail= (String) entity.getProperty("collaborators_"+j);

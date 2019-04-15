@@ -16,18 +16,8 @@
 
 package com.google.codeu.servlets;
 
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-import com.google.appengine.api.images.ImagesService;
-import com.google.appengine.api.images.ImagesServiceFactory;
-import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.cloud.translate.Translate;
-import com.google.cloud.translate.Translate.TranslateOption;
-import com.google.cloud.translate.TranslateOptions;
-import com.google.cloud.translate.Translation;
 import com.google.codeu.data.*;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -40,8 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
-//import sun.jvm.hotspot.ui.tree.FloatTreeNodeAdapter;
-//import sun.jvm.hotspot.ui.tree.FloatTreeNodeAdapter;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
