@@ -2,6 +2,7 @@ package com.google.codeu.servlets;
 
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
+import com.google.codeu.data.MvpConcreteEvent;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.List;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * Handles fetching all messages for the public feed.
  */
 @WebServlet("/feed")
-public class MessageFeedServlet extends HttpServlet {
+public class MvpEventFeedServlet extends HttpServlet {
 
   private Datastore datastore;
 
@@ -32,9 +33,9 @@ public class MessageFeedServlet extends HttpServlet {
 
     response.setContentType("application/json");
 
-    List<Message> messages = datastore.getAllMessages();
+    List<MvpConcreteEvent> schedule = datastore.getAllMessages();
     Gson gson = new Gson();
-    String json = gson.toJson(messages);
+    String json = gson.toJson(schedule);
 
     response.getOutputStream().println(json + "\n");
   }

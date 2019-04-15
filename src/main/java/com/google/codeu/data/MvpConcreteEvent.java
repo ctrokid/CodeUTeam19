@@ -1,6 +1,9 @@
 package com.google.codeu.data;
 
+import java.util.UUID;
+
 public class MvpConcreteEvent {
+  private final UUID id;
   private String description;
   private String location;
   private String startTime;
@@ -19,6 +22,7 @@ public class MvpConcreteEvent {
     this.location = location;
     this.startTime = startTime;
     this.endTime = endTime;
+    this.id = UUID.randomUUID();
   }
 
   public String getStartTime() {
@@ -35,6 +39,10 @@ public class MvpConcreteEvent {
 
   public String getLocation() {
     return location;
+  }
+
+  public UUID getId() {
+    return id;
   }
 }
 
