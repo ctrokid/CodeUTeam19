@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Returns login data as JSON, e.g. {"isLoggedIn": true, "username": "Ada"}
  */
-@WebServlet("/login-status")
+//@WebServlet("/login-status")
 public class LoginStatusServlet extends HttpServlet {
 
   @Override
@@ -38,10 +38,12 @@ public class LoginStatusServlet extends HttpServlet {
     JsonObject jsonObject = new JsonObject();
 
     UserService userService = UserServiceFactory.getUserService();
-    if (userService.isUserLoggedIn()) {
-      jsonObject.addProperty("isLoggedIn", true);
-      jsonObject.addProperty("username", userService.getCurrentUser().getEmail());
-    } else {
+    try {
+      if (userService.isUserLoggedIn()) {
+        jsonObject.addProperty("isLoggedIn", true);
+        jsonObject.addProperty("username", userService.getCurrentUser().getEmail());
+      }
+    } catch (Exception e) {
       jsonObject.addProperty("isLoggedIn", false);
     }
 

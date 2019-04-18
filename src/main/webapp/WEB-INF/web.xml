@@ -22,7 +22,27 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
     <servlet-mapping>
         <servlet-name>calendarOAuthServlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/u/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>loginStatusServlet</servlet-name>
+        <servlet-class>com.google.codeu.servlets.LoginStatusServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>loginStatusServlet</servlet-name>
+        <url-pattern>/login-status</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>logoutServlet</servlet-name>
+        <servlet-class>com.google.codeu.servlets.LogoutServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>logoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
 

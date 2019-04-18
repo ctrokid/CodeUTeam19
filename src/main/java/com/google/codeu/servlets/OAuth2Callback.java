@@ -4,6 +4,7 @@ import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.appengine.auth.oauth2.AbstractAppEngineAuthorizationCodeCallbackServlet;
+import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -17,7 +18,11 @@ public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackSe
   @Override
   protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential)
           throws ServletException, IOException {
-    resp.sendRedirect("/");
+    //log this
+    UserService userService = UserServiceFactory.getUserService();
+
+    String user = userService.getCurrentUser().getEmail();
+    resp.sendRedirect("/user-page.html?user=" + user);
   }
 
   @Override

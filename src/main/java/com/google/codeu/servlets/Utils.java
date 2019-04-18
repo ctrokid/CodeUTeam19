@@ -16,6 +16,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
