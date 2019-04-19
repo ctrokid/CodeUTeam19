@@ -15,7 +15,6 @@ import org.jsoup.safety.Whitelist;
 /**
  * Handles fetching and saving user data.
  */
-@WebServlet("/about")
 public class AboutMeServlet extends HttpServlet {
 
   private Datastore datastore;
@@ -67,6 +66,6 @@ public class AboutMeServlet extends HttpServlet {
     User user = new User(userEmail, aboutMe);
     datastore.storeUser(user);
 
-    response.sendRedirect("/user-page.html?user=" + userEmail);
+    response.sendRedirect("u/user-page.html?user=" + userEmail);
   }
 }

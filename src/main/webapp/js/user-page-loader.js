@@ -130,7 +130,7 @@ function buildMessageDiv(message) {
 }
 
 function buildLanguageLinks(){
-  const userPageUrl = '/user-page.html?user=' + parameterUsername;
+  const userPageUrl = 'u/user-page.html?user=' + parameterUsername;
   const languagesListElement  = document.getElementById('languages');
   languagesListElement.appendChild(createListItem(createLink(
        userPageUrl + '&language=en', 'English')));

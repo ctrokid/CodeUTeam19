@@ -33,6 +33,7 @@ public class MessageFeedServlet extends HttpServlet {
     response.setContentType("application/json");
 
     List<Message> messages = datastore.getAllMessages();
+    //try calling calendar here
     Gson gson = new Gson();
     String json = gson.toJson(messages);
 

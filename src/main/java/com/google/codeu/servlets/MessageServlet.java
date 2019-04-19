@@ -32,7 +32,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
 /** Handles fetching and saving {@link Message} instances. */
-@WebServlet("/messages")
 public class MessageServlet extends HttpServlet {
 
 

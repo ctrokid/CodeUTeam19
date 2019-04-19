@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Handles fetching site statistics.
  */
-@WebServlet("/stats")
 public class StatsPageServlet extends HttpServlet {
 
   private Datastore datastore;
