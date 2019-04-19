@@ -1,71 +1,57 @@
 package com.google.codeu.data;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-public class Course implements ScheduleItem {
-  private Time startTime;
-  private Time endTime;
-  private List<String> daysOfWeek;
-  private String description;
+public class Course extends ItemSchedule {
+
+  private List<Days> daysOfWeek;
   private String grade;
-  private String location;
   private List<Assignment> assignments;
 
-  public Course(Time startTime, Time endTime) {
+  public Course(String creator, UUID id, long startTime, long endTime) {
+    this.creator = creator;
+    this.id = id;
     this.startTime = startTime;
     this.endTime = endTime;
+
+    daysOfWeek = new ArrayList<>();
+    assignments = new ArrayList<>();
+    description = "";
+    grade = "";
   }
 
-  public Time getStartTime() {
-    return startTime;
+  public Course(String creator, long startTime, long endTime) {
+    this.creator = creator;
+    this.id = UUID.randomUUID();
+    this.startTime = startTime;
+    this.endTime = endTime;
+
+    daysOfWeek = new ArrayList<>();
+    assignments = new ArrayList<>();
+    description = "";
+    grade = "";
   }
 
-  public Time getEndTime() {
-    return endTime;
-  }
-
-  public List<String> getDaysOfWeek() {
+  public List<Days> getDaysOfWeek() {
     return daysOfWeek;
-  }
-
-  public String getDescription() {
-    return description;
   }
 
   public String getGrade() {
     return grade;
   }
 
-  public String getLocation() {
-    return location;
-  }
-
   public List<Assignment> getAssignments() {
     return assignments;
   }
 
-  public void setStartTime(Time startTime) {
-    this.startTime = startTime;
-  }
-
-  public void setEndTime(Time endTime) {
-    this.endTime = endTime;
-  }
-
-  public void setDaysOfWeek(List<String> daysOfWeek) {
+  public void setDaysOfWeek(List<Days> daysOfWeek) {
     this.daysOfWeek = daysOfWeek;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
   }
 
   public void setGrade(String grade) {
     this.grade = grade;
-  }
-
-  public void setLocation(String location) {
-    this.location = location;
   }
 
   public void setAssignments(List<Assignment> assignments) {

@@ -1,12 +1,19 @@
 package com.google.codeu.data;
 
-public class Assignment implements ScheduleItem {
+public class Assignment {
   private String dueDate;
-  private Course course;
+  private String course;
   private boolean completed;
 
-  public Assignment(String dueDate) {
+  public Assignment(String course, String dueDate) {
+    this.course = course;
     this.dueDate = dueDate;
+  }
+
+  public Assignment(String course, String dueDate, boolean completed) {
+    this.course = course;
+    this.dueDate = dueDate;
+    this.completed = completed;
   }
 
   public String getDueDate() {
@@ -17,11 +24,11 @@ public class Assignment implements ScheduleItem {
     this.dueDate = dueDate;
   }
 
-  public Course getCourse() {
+  public String getCourse() {
     return course;
   }
 
-  public void setCourse(Course course) {
+  public void setCourse(String course) {
     this.course = course;
   }
 

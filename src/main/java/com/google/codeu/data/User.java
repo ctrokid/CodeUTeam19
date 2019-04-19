@@ -10,6 +10,11 @@ public class User {
     this.aboutMe = aboutMe;
   }
 
+  public User(String email) {
+    this.email = email;
+    this.aboutMe = "";
+  }
+
   public String getEmail() {
     return email;
   }
