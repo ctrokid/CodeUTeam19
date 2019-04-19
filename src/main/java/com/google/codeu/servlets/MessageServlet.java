@@ -16,23 +16,12 @@
 
 package com.google.codeu.servlets;
 
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-import com.google.appengine.api.images.ImagesService;
-import com.google.appengine.api.images.ImagesServiceFactory;
-import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.cloud.translate.Translate;
-import com.google.cloud.translate.Translate.TranslateOption;
-import com.google.cloud.translate.TranslateOptions;
-import com.google.cloud.translate.Translation;
-import com.google.codeu.data.Datastore;
-import com.google.codeu.data.Message;
-import com.google.codeu.data.Pair;
+import com.google.codeu.data.*;
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.annotation.WebServlet;
@@ -44,6 +33,7 @@ import org.jsoup.safety.Whitelist;
 
 /** Handles fetching and saving {@link Message} instances. */
 public class MessageServlet extends HttpServlet {
+
 
   private Datastore datastore;
 
@@ -71,12 +61,6 @@ public class MessageServlet extends HttpServlet {
 
     List<Message> messages = datastore.getMessages(user);
 
-    String targetLanguageCode = request.getParameter("language");
-
-    if (targetLanguageCode != null) {
-      translateMessages(messages, targetLanguageCode);
-    }
-
     Gson gson = new Gson();
     String json = gson.toJson(messages);
     response.getWriter().println(json);
@@ -90,152 +74,77 @@ public class MessageServlet extends HttpServlet {
     if (!userService.isUserLoggedIn()) {
       response.sendRedirect("/index.html");
       return;
-    }    
+    }
     final String user = userService.getCurrentUser().getEmail();
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
     final String recipient = request.getParameter("recipient");
 
-    Pair<Integer> captionRange = captionValidator(text);
-    Pair<Integer> urlRange = urlValidator(text);
-    if (captionRange == null) {
-      captionRange = new Pair<>(0,0);
-    }
-    if (urlRange == null) {
-      urlRange = new Pair<>(0,0);
-    }
-    text = messageFormat(text,captionRange,urlRange);
-
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
-    List<BlobKey> blobKeys = blobs.get("image");
-
     Message message = new Message(user, text, recipient);
-
-    if (blobKeys != null && !blobKeys.isEmpty()) {
-      BlobKey blobKey = blobKeys.get(0);
-      ImagesService imagesService = ImagesServiceFactory.getImagesService();
-      ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
-      String imageUrl = imagesService.getServingUrl(options);
-      message.setImageUrl(imageUrl);
-    }
     datastore.storeMessage(message);
+
+    testPostTask(text);
 
     response.sendRedirect("/user-page.html?user=" + recipient);
   }
 
-  private void translateMessages(List<Message> messages, String targetLanguageCode) {
-    Translate translate = TranslateOptions.getDefaultInstance().getService();
+  //Read From InputText field to create a ScheduleItem
+  private void testPostTask(String line) {
+    String[] split = line.split(" ");
+    long startTime = Long.parseLong(split[1]);
+    long endTime = Long.parseLong(split[2]);
+    String description = split[3];
 
-    for (Message message : messages) {
-      String originalText = message.getText();
+    String loc_Title = split[4];
+    String loc_Description = split[5];
+    float loc_Lat = Float.parseFloat(split[6]);
+    float loc_Lng = Float.parseFloat(split[7]);
+    Location loc = new Location(loc_Title,loc_Description,loc_Lat,loc_Lng);
 
-      Translation translation = translate.translate(
-          originalText, TranslateOption.targetLanguage(targetLanguageCode));
-      String translatedText = translation.getTranslatedText();
+    String creator = split[8];
 
-      message.setText(translatedText);
+    //Course
+    if(split[0].compareTo("Course") == 0) {
+      ArrayList<Days> daysOfWeek = new ArrayList<>();
+      for (String s : split[9].split("_")) {
+        daysOfWeek.add(Days.getValueEnum(s));
+      }
+      String grade = split[10];
+      ArrayList<Assignment> assignments = new ArrayList<>();
+
+      Course course = new Course(creator,startTime,endTime);
+      course.setLocation(loc);
+      course.setDescription(description);
+      course.setDaysOfWeek(daysOfWeek);
+      course.setGrade(grade);
+      course.setAssignments(assignments);
+
+      datastore.storeItemSchedule(course);
     }
-  }
+    //Event || Task
+    else {
+      int priorityLevel = Integer.parseInt(split[9]);
+      ArrayList<User> collaborators = new ArrayList<>();
+      collaborators.add(new User("test1@test.com"));
+      collaborators.add(new User("test2@test.com"));
+      if(split[0].compareTo("Task") == 0) {
+        Event event = new Event(creator,endTime,startTime,priorityLevel);
+        event.setLocation(loc);
+        event.setDescription(description);
+        event.setCollaborators(collaborators);
 
-  /**
-   *
-   * @param message receive the raw string message entered by the user.
-   * @return null if url is invalid, otherwise return start and end point of url.
-   */
-  private Pair<Integer> urlValidator(String message) {
-    int i = -1;
-    boolean containS = true;
-    i = message.indexOf("https://");
-    if (i == -1) {
-      i = message.indexOf("http://");
-      containS = false;
-    }
-    if (i == -1) {
-      return null;
-    }
-    int start = containS ? 8 : 7;
-    start += i;
+        datastore.storeItemSchedule(event);
+      }
+      else {
+        Task task = new Task(creator,endTime,startTime,priorityLevel);
+        task.setLocation(loc);
+        task.setDescription(description);
+        task.setCollaborators(collaborators);
+        boolean completed = Boolean.parseBoolean(split[10]);
+        task.setCompleted(completed);
 
-    String [] ext = {".jpg",".png",".gif",".bpm"};
-    int end = -1;
-    String urlExt = "";
-    for (String s : ext) {
-      end = message.indexOf(s,i);
-      if (end != -1) {
-        urlExt = s;
-        break;
+        datastore.storeItemSchedule(task);
       }
     }
-    char prior = message.charAt(start);
-    if (prior == '.' || prior == '/') {
-      return null;
-    }
-
-    for (int j = start + 1; j < end; j++) {
-      char actual = message.charAt(j);
-      if (actual == '.' || actual == '/') {
-        if (prior == '.' || prior == '/') {
-          return null;
-        }
-      }
-      prior = actual;
-    }
-    return new Pair<>(i,end + urlExt.length());
   }
 
-  /**
-   *
-   * @param message receive the raw string message entered by the user.
-   * @return null if caption is invalid, otherwise return start and end point of caption.
-   */
-  private Pair<Integer> captionValidator(String message) {
-    int i = -1;
-    i = message.indexOf("![");
-    if (i == -1) {
-      return null;
-    }
-    int end = message.indexOf("]", i);
-    if (end == -1) {
-      return null;
-    }
-    return new Pair<>(i + 2,end);
-  }
-
-  /**
-   *
-   * @param msg receive the message containing the raw text.
-   * @param capInterv receive the interval containing the caption fo the image.
-   * @param urlInterv receive the interval containing the ulr of the image.
-   * @return message formated with the HTML code to show caption and image.
-   */
-  private String messageFormat(String msg, Pair<Integer> capInterv, Pair<Integer> urlInterv) {
-    String result = "";
-    int endOfText = Math.min(capInterv.getKey(),urlInterv.getKey());
-    if (endOfText == 0) {
-      endOfText = Math.max(capInterv.getKey(),urlInterv.getKey());
-    }
-    if (endOfText == 0) {
-      return msg;
-    }
-    if (capInterv.getValue() - capInterv.getKey() != 0) {
-      result += msg.substring(0, endOfText - 2);
-    } else {
-      result += msg.substring(0, endOfText);
-    }
-    result += "<figure> ";
-    String caption = "";
-    if (capInterv.getValue() - capInterv.getKey() != 0) {
-      caption = "<figcaption> ";
-      caption = caption + msg.substring(capInterv.getKey(), capInterv.getValue());
-      caption = caption + " </figcaption> ";
-    }
-    String image = "";
-    if (urlInterv.getValue() - urlInterv.getKey() != 0) {
-      image = "<img src=\"";
-      image = image + msg.substring(urlInterv.getKey(), urlInterv.getValue());
-      image = image + "\"/>";
-    }
-    result += image + caption + "</figure>";
-    return result;
-  }
 }
