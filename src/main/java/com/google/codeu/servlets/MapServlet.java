@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Returns NYC-museum data as a JSON array, e.g. [{"lat": 38.4404675, "lng": -122.7144313}]
  */
-@WebServlet("/museum-data")
 public class MapServlet extends HttpServlet {
   JsonArray museumArray;
 

@@ -6,30 +6,46 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
 
     <servlet>
-        <servlet-name>oauth2Callback</servlet-name>
-        <servlet-class>com.google.codeu.servlets.OAuth2Callback</servlet-class>
+        <servlet-name>aboutMeServlet</servlet-name>
+        <servlet-class>com.google.codeu.servlets.AboutMeServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
-        <servlet-name>oauth2Callback</servlet-name>
-        <url-pattern>/oauth2callback/*</url-pattern>
+        <servlet-name>aboutMeServlet</servlet-name>
+        <url-pattern>/about</url-pattern>
     </servlet-mapping>
 
     <servlet>
         <servlet-name>calendarOAuthServlet</servlet-name>
         <servlet-class>com.google.codeu.servlets.CalendarOAuthServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>calendarOAuthServlet</servlet-name>
         <url-pattern>/u/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>imageUploadUrlServlet</servlet-name>
+        <servlet-class>com.google.codeu.servlets.ImageUploadUrlServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>imageUploadUrlServlet</servlet-name>
+        <url-pattern>/image-upload-url</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>loginServlet</servlet-name>
+        <servlet-class>com.google.codeu.servlets.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>loginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>loginStatusServlet</servlet-name>
         <servlet-class>com.google.codeu.servlets.LoginStatusServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>loginStatusServlet</servlet-name>
         <url-pattern>/login-status</url-pattern>
@@ -39,10 +55,54 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         <servlet-name>logoutServlet</servlet-name>
         <servlet-class>com.google.codeu.servlets.LogoutServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>logoutServlet</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>mapServlet</servlet-name>
+        <servlet-class>com.google.codeu.servlets.MapServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>mapServlet</servlet-name>
+        <url-pattern>/museum-data</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>messageFeedServlet</servlet-name>
+        <servlet-class>com.google.codeu.servlets.MessageFeedServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>messageFeedServlet</servlet-name>
+        <url-pattern>/feed</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>messageServlet</servlet-name>
+        <servlet-class>com.google.codeu.servlets.MessageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>messageServlet</servlet-name>
+        <url-pattern>/messages</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>oauth2Callback</servlet-name>
+        <servlet-class>com.google.codeu.servlets.OAuth2Callback</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>oauth2Callback</servlet-name>
+        <url-pattern>/oauth2callback/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>statsServlet</servlet-name>
+        <servlet-class>com.google.codeu.servlets.StatsPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>statsServlet</servlet-name>
+        <url-pattern>/stats</url-pattern>
     </servlet-mapping>
 
 

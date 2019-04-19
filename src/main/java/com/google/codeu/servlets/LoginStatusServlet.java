@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Returns login data as JSON, e.g. {"isLoggedIn": true, "username": "Ada"}
  */
-//@WebServlet("/login-status")
 public class LoginStatusServlet extends HttpServlet {
 
   @Override

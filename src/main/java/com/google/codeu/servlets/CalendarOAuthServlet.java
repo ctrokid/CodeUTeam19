@@ -21,9 +21,17 @@ public class CalendarOAuthServlet extends AbstractAppEngineAuthorizationCodeServ
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws IOException {
+
+    // Initializes Flow
     GoogleAuthorizationCodeFlow flow = Utils.newFlow();
+
+    // Creates authorization url for prompting OAuth consent screen
     AuthorizationCodeRequestUrl authorizationUrl = flow.newAuthorizationUrl();
+
+    // Set redirect uri to callback
     authorizationUrl.setRedirectUri(getRedirectUri(request));
+
+    // Redirect to authorization url
     response.sendRedirect(authorizationUrl.build());
   }
 
