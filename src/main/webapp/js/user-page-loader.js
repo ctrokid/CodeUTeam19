@@ -20,31 +20,31 @@ const parameterUsername = urlParams.get('user');
 
 // URL must include ?user=XYZ parameter. If not, redirect to homepage.
 if (!parameterUsername) {
-  window.location.replace('/');
+    window.location.replace('/');
 }
 
 /** Sets the page title based on the URL parameter username. */
 function setPageTitle() {
-  document.getElementById('page-title').innerText = parameterUsername;
-  document.title = parameterUsername + ' - User Page';
+    document.getElementById('page-title').innerText = parameterUsername;
+    document.title = parameterUsername + ' - User Page';
 }
 
 /**
  *Requests the users about me data and adds it to the page.
  */
 function fetchAboutMe(){
-  const url = '/about?user=' + parameterUsername;
-  fetch(url).then((response) => {
-    return response.text();
-  }).then((aboutMe) => {
-    const aboutMeContainer = document.getElementById('about-me-container');
+    const url = '/about?user=' + parameterUsername;
+    fetch(url).then((response) => {
+        return response.text();
+}).then((aboutMe) => {
+        const aboutMeContainer = document.getElementById('about-me-container');
     if(aboutMe == ''){
-      aboutMe = 'This user has not entered any information yet.';
+        aboutMe = 'This user has not entered any information yet.';
     }
 
     aboutMeContainer.innerHTML = aboutMe;
 
-  });
+});
 }
 
 /**
@@ -56,50 +56,38 @@ function showMessageFormIfLoggedIn() {
         return response.json();
 })
 .then((loginStatus) => {
-        if (loginStatus.isLoggedIn &&
-    loginStatus.username == parameterUsername) {
-        fetchImageUploadUrlAndShowForm();
+        if (loginStatus.isLoggedIn) {
+        const messageForm = document.getElementById('message-form');
+        messageForm.action = '/messages?recipient=' + parameterUsername;
+        messageForm.classList.remove('hidden');
     }
 });
     document.getElementById('about-me-form').classList.remove('hidden');
 }
 
-function fetchImageUploadUrlAndShowForm() {
-    fetch('/image-upload-url')
-        .then((response) => {
-        return response.text();
-})
-.then((imageUploadUrl) => {
-        const messageForm = document.getElementById('message-form');
-    messageForm.action = imageUploadUrl;
-    messageForm.classList.remove('hidden');
-    document.getElementById('recipientInput').value = parameterUsername;
-});
-}
-
 /** Fetches messages and add them to the page. */
 function fetchMessages() {
-  const parameterLanguage = urlParams.get('language');
-  let url = '/messages?user=' + parameterUsername;
-  if(parameterLanguage) {
-    url += '&language=' + parameterLanguage;
-  }
-  fetch(url)
-      .then((response) => {
+    const parameterLanguage = urlParams.get('language');
+    let url = '/messages?user=' + parameterUsername;
+    if(parameterLanguage) {
+        url += '&language=' + parameterLanguage;
+    }
+    fetch(url)
+        .then((response) => {
         return response.json();
-      })
-      .then((messages) => {
+})
+.then((messages) => {
         const messagesContainer = document.getElementById('message-container');
-        if (messages.length == 0) {
-          messagesContainer.innerHTML = '<p>This user has no posts yet.</p>';
-        } else {
-          messagesContainer.innerHTML = '';
-        }
-        messages.forEach((message) => {
-          const messageDiv = buildMessageDiv(message);
-          messagesContainer.appendChild(messageDiv);
-        });
-      });
+    if (messages.length == 0) {
+        messagesContainer.innerHTML = '<p>This user has no posts yet.</p>';
+    } else {
+        messagesContainer.innerHTML = '';
+    }
+    messages.forEach((message) => {
+        const messageDiv = buildMessageDiv(message);
+    messagesContainer.appendChild(messageDiv);
+});
+});
 }
 
 /**
@@ -108,46 +96,42 @@ function fetchMessages() {
  * @return {Element}
  */
 function buildMessageDiv(message) {
-  const headerDiv = document.createElement('div');
-  headerDiv.classList.add('message-header');
-  headerDiv.appendChild(document.createTextNode(
-      message.user + ' - ' + new Date(message.timestamp)));
+    const headerDiv = document.createElement('div');
+    headerDiv.classList.add('message-header');
+    headerDiv.appendChild(document.createTextNode(
+        message.user + ' - ' + new Date(message.timestamp)));
 
-  const bodyDiv = document.createElement('div');
-  bodyDiv.classList.add('message-body');
-  bodyDiv.innerHTML = message.text;
+    const bodyDiv = document.createElement('div');
+    bodyDiv.classList.add('message-body');
+    bodyDiv.innerHTML = message.text;
 
-  const messageDiv = document.createElement('div');
-  messageDiv.classList.add('message-div');
-  messageDiv.appendChild(headerDiv);
-  messageDiv.appendChild(bodyDiv);
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message-div');
+    messageDiv.appendChild(headerDiv);
+    messageDiv.appendChild(bodyDiv);
 
-  if(message.imageUrl) {
-      bodyDiv.innerHTML += '<br/>';
-      bodyDiv.innerHTML += '<img src="' + message.imageUrl + '" />';
-  }
-  return messageDiv;
+    return messageDiv;
 }
 
 function buildLanguageLinks(){
-  const userPageUrl = 'u/user-page.html?user=' + parameterUsername;
-  const languagesListElement  = document.getElementById('languages');
-  languagesListElement.appendChild(createListItem(createLink(
-       userPageUrl + '&language=en', 'English')));
-  languagesListElement.appendChild(createListItem(createLink(
-      userPageUrl + '&language=zh', 'Chinese')));
-  languagesListElement.appendChild(createListItem(createLink(
-      userPageUrl + '&language=hi', 'Hindi')));
-  languagesListElement.appendChild(createListItem(createLink(
-      userPageUrl + '&language=es', 'Spanish')));
-  languagesListElement.appendChild(createListItem(createLink(
-      userPageUrl + '&language=ar', 'Arabic')));
+    const userPageUrl = '/user-page.html?user=' + parameterUsername;
+    const languagesListElement  = document.getElementById('languages');
+    languagesListElement.appendChild(createListItem(createLink(
+        userPageUrl + '&language=en', 'English')));
+    languagesListElement.appendChild(createListItem(createLink(
+        userPageUrl + '&language=zh', 'Chinese')));
+    languagesListElement.appendChild(createListItem(createLink(
+        userPageUrl + '&language=hi', 'Hindi')));
+    languagesListElement.appendChild(createListItem(createLink(
+        userPageUrl + '&language=es', 'Spanish')));
+    languagesListElement.appendChild(createListItem(createLink(
+        userPageUrl + '&language=ar', 'Arabic')));
 }
 
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
-  setPageTitle();
-  showMessageFormIfLoggedIn();
-  fetchMessages();
-  fetchAboutMe();
+    setPageTitle();
+    showMessageFormIfLoggedIn();
+    fetchMessages();
+    fetchAboutMe();
 }

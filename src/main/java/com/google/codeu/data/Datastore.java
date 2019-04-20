@@ -24,7 +24,6 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,7 +160,7 @@ public class Datastore {
 
     //Save ItemSchedule Properties
     Entity itemScheduleEntity = new Entity(kind, itemSchedule.getId().toString());
-    itemScheduleEntity.setProperty("creator",itemSchedule.getCreator());
+    itemScheduleEntity.setProperty("title",itemSchedule.getTitle());
     itemScheduleEntity.setProperty("startTime",itemSchedule.getStartTime());
     itemScheduleEntity.setProperty("endTime",itemSchedule.getEndTime());
     itemScheduleEntity.setProperty("description",itemSchedule.getDescription());
@@ -220,11 +219,12 @@ public class Datastore {
    */
   public List<ItemSchedule> getItemSchedule(String user) {
     List<ItemSchedule> items = new ArrayList<>();
+    /*
     String [] kinds = {"Course","Event","Task"};
     for (int i = 0; i < kinds.length ; i++) {
       Query query =
           new Query(kinds[i]);
-              //.setFilter(new Query.FilterPredicate("creator", FilterOperator.EQUAL, user))
+              //.setFilter(new Query.FilterPredicate("title", FilterOperator.EQUAL, user))
               //.addSort("startTime", SortDirection.DESCENDING);
       PreparedQuery results = datastore.prepare(query);
       for (Entity entity : results.asIterable()) {
@@ -232,9 +232,9 @@ public class Datastore {
           //ItemSchedule
           String idString = entity.getKey().getName();
           UUID id = UUID.fromString(idString);
-          String creator = (String) entity.getProperty("creator");
-          long startTime = (long) entity.getProperty("startTime");
-          long endTime = (long) entity.getProperty("endTime");
+          String creator = (String) entity.getProperty("title");
+          Object startTime = entity.getProperty("startTime");
+          Object endTime = entity.getProperty("endTime");
           String description = (String) entity.getProperty("description");
 
           //Location
@@ -302,6 +302,8 @@ public class Datastore {
         }
       }
     }
+
+     */
     return items;
   }
 
@@ -354,5 +356,5 @@ public class Datastore {
   }
 
   //endregion
-  
+
 }

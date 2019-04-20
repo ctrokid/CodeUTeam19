@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Event extends ItemSchedule {
-  private int priorityLevel;
+  private String priorityLevel;
   private List<User> collaborators;
 
   /**
@@ -13,8 +13,8 @@ public class Event extends ItemSchedule {
    * @param endTime the end time of the event
    * @param priorityLevel the priority level of the event
    */
-  public Event(String creator, long startTime, long endTime, int priorityLevel) {
-    this.creator = creator;
+  public Event(String title, String startTime, String endTime, String priorityLevel) {
+    this.title = title;
     this.id = UUID.randomUUID();
     this.startTime = startTime;
     this.endTime = endTime;
@@ -22,16 +22,8 @@ public class Event extends ItemSchedule {
     description = "";
   }
 
-  public Event(String creator, UUID id, long startTime, long endTime, int priorityLevel) {
-    this.creator = creator;
-    this.id = id;
-    this.startTime = startTime;
-    this.endTime = endTime;
-    this.priorityLevel = priorityLevel;
-    description = "";
-  }
 
-  public int getPriorityLevel() {
+  public String getPriorityLevel() {
     return priorityLevel;
   }
 
@@ -39,7 +31,7 @@ public class Event extends ItemSchedule {
     return collaborators;
   }
 
-  public void setPriorityLevel(int priorityLevel) {
+  public void setPriorityLevel(String priorityLevel) {
     this.priorityLevel = priorityLevel;
   }
 
