@@ -67,26 +67,16 @@ function showMessageFormIfLoggedIn() {
 
 /** Fetches messages and add them to the page. */
 function fetchMessages() {
-    const parameterLanguage = urlParams.get('language');
-    let url = '/messages?user=' + parameterUsername;
-    if(parameterLanguage) {
-        url += '&language=' + parameterLanguage;
-    }
-    fetch(url)
-        .then((response) => {
-        return response.json();
-})
-.then((messages) => {
-        const messagesContainer = document.getElementById('message-container');
-    if (messages.length == 0) {
-        messagesContainer.innerHTML = '<p>This user has no posts yet.</p>';
-    } else {
-        messagesContainer.innerHTML = '';
-    }
-    messages.forEach((message) => {
-        const messageDiv = buildMessageDiv(message);
-    messagesContainer.appendChild(messageDiv);
-});
+    const url = '/about?user=' + parameterUsername;
+    fetch(url).then((response) => {
+        return response.text();
+    }).then((aboutMe) => {
+        const aboutMeContainer = document.getElementById('message-container');
+        if(aboutMe == ''){
+            aboutMe = 'No events created yet';
+        }
+
+        aboutMeContainer.innerHTML = aboutMe;
 });
 }
 
