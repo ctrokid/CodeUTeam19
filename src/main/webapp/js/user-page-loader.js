@@ -29,14 +29,17 @@ if (!parameterUsername) {
 function showMessageFormIfLoggedIn() {
     fetch('/login-status')
         .then((response) => {
-        return response.json();
-})
-.then((loginStatus) => {
-        if (loginStatus.isLoggedIn) {
-        const messageForm = document.getElementById('id_1555739088231_637');
-        messageForm.action = '/user-page.html?user=' + parameterUsername;
-    }
-});
+            return response.json();
+        })
+        .then((loginStatus) => {
+            if (loginStatus.isLoggedIn) {
+                const messageForm = document.getElementById('message-form');
+                messageForm.action = '/messages?recipient=' + parameterUsername;
+                messageForm.classList.remove('hidden');
+            }
+        });
+    //document.getElementById('about-me-form').classList.remove('hidden');
+
 }
 
 /** Fetches messages and add them to the page. */
@@ -87,7 +90,7 @@ function buildEventDiv(event) {
     const spaceDiv = document.createElement('div');
     spaceDiv.classList.add('message-space');
     spaceDiv.appendChild(document.createTextNode(
-        " "));
+        "********************************************"));
 
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message-div');
