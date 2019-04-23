@@ -45,6 +45,7 @@ limitations under the License.
 </nav>
 <div class="silex-pages">
     <div data-silex-type="image" class="editable-style silex-id-hamburger-menu image-element menu-button prevent-draggable hide-on-desktop" data-silex-id="silex-id-hamburger-menu">
+
         <img alt="open mobile menu" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAoCAYAAAC8cqlMAAAB5UlEQVR42u2ZPWvCUBSGM+UfFO3e3dLu/QN+oKj4EUXRQREEJYgoiCAu6qCogyDo7iJ21
             UUaKqEgCC4iiEMGB3UVgsnpTWj/wfVK2nvhGbKEPJyT996TMMzPGg6H5mKx+GgkyuWyeTQasb8OTDwef4tEIp8+n+/LYIjJZJJHQiwzm81M6OLDarWqNpsNjEYgEJCy2ewT0+/3TagighElNFAnQT6ft1ARKkJFqMgfFvF4PFpuEwF
                 tdrcRqVarIIoirFYrIiyXSxiPx+B2u/GJBINBuF6vQHopigK1Wg2fCMdxcLlciIuoqgqNRgOfiN1uB3Qwg91uB8fjkQiHwwEmkwne1qLxS0VuKKJle71eh06nQ4Rmswk8z+MVcTqdsNlsQJZlotF7Pp8hk8ngE4lGo/qN7xG/
@@ -55,7 +56,8 @@ limitations under the License.
     <a id="page-page-1" data-silex-type="page" class="page-element" href="#!page-page-1">Page 1</a></div>
 <div data-silex-type="container" class="prevent-draggable container-element editable-style silex-id-1474394621033-3 section-element" data-silex-id="silex-id-1474394621033-3" style="">
     <div data-silex-type="container" class="editable-style silex-element-content silex-id-1474394621032-2 silex-container-content container-element prevent-draggable website-width"
-         data-silex-id="silex-id-1474394621032-2"><div data-silex-type="text" class="editable-style silex-id-1555739811468-4 text-element" data-silex-id="silex-id-1555739811468-4"><div class="silex-element-content normal"><h2><b><i>Welcome to the Ultimate Task Manager!</i></b></h2></div></div><div data-silex-type="html" class="editable-style silex-id-1555738067737-0 html-element silex-component silex-component-form silex-use-height-not-minheight silex-element-content-full-height" data-silex-id="silex-id-1555738067737-0"><div class="silex-element-content"><form id="id_1555739088231_637" method = "POST" action="/messages">
+         data-silex-id="silex-id-1474394621032-2"><div data-silex-type="text" class="editable-style silex-id-1555739811468-4 text-element" data-silex-id="silex-id-1555739811468-4"><div class="silex-element-content normal"><h2><b><i>Welcome to the Ultimate Task Manager!</i></b></h2></div></div><div data-silex-type="html" class="editable-style silex-id-1555738067737-0 html-element silex-component silex-component-form silex-use-height-not-minheight silex-element-content-full-height" data-silex-id="silex-id-1555738067737-0"><div class="silex-element-content">
+        <form id="id_1555739088231_637" method = "POST" action="/messages">
         <div>
             <label for="field1">Title of Task</label>
             <input type="text" required="" id="field1" name="field1" placeholder="Enter title here">
@@ -68,8 +70,10 @@ limitations under the License.
             <label for="field3">Details</label>
             <textarea required="" id="field3" name="field3" placeholder="Ex. Description of Task, Location, Collaborators"></textarea>
         </div>
+        <input type="hidden" value="" name="recipient" id="recipientInput">
         <input type="submit" value="Create">
     </form>
+
         <style>#id_1555739088231_637 input[type=text], select {width: 100%; padding: 12px 20px; margin: 8px 0; display: inline-block; border: 1px solid #ccc; border-radius: 3px; box-sizing: border-box;}#id_1555739088231_637 input[type=submit] {width: 100%; background-color: #5584af; color: #FFFFFF; padding: 14px 20px; margin: 8px 0; border: 1px solid #485daf; border-radius: 3px; cursor: pointer;}#id_1555739088231_637 label {color: #000000;}#id_1555739088231_637 .fill-vertical {flex: 1 1 auto; display: flex; flex-direction: column;}#id_1555739088231_637 .fill-vertical textarea {flex: 1 1 auto; width: 100%; height: 150px; padding: 12px 20px; box-sizing: border-box; border: 2px solid #ccc; border-radius: 3px; background-color: #f8f8f8; font-size: 16px; resize: none;}#id_1555739088231_637 {border-radius: 3px; display: flex; flex-direction: column; justify-content: space-between; height: 100%;}</style>
     </div></div><div data-silex-type="text" class="editable-style silex-id-1555739905052-5 text-element" data-silex-id="silex-id-1555739905052-5"><div class="silex-element-content normal"><p>Create New Task Here!</p></div></div><div data-silex-type="text" class="editable-style silex-id-1555740050652-13 text-element" data-silex-id="silex-id-1555740050652-13">
         <div id="message-container">Loading...</div></div>

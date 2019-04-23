@@ -35,7 +35,6 @@ function showMessageFormIfLoggedIn() {
         if (loginStatus.isLoggedIn) {
         const messageForm = document.getElementById('id_1555739088231_637');
         messageForm.action = '/user-page.html?user=' + parameterUsername;
-        messageForm.classList.remove('hidden');
     }
 });
 }

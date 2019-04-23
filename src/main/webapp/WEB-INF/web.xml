@@ -11,7 +11,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet>
     <servlet-mapping>
         <servlet-name>scheduleServlet</servlet-name>
-        <url-pattern>/schedule</url-pattern>
+        <url-pattern>/about</url-pattern>
     </servlet-mapping>
 
     <servlet>
