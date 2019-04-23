@@ -84,6 +84,7 @@ public class Datastore {
    *     message. List is sorted by time descending.
    */
   public List<Event> getEvents(String startTime) {
+
     List<Event> events = new ArrayList<>();
 
     Query query =
@@ -119,16 +120,29 @@ public class Datastore {
    *     message. List is sorted by user and time descending.
    */
   public List<Event> getAllMessages() {
-    List<Event> event = new ArrayList<>();
+    List<Event> events = new ArrayList<>();
+
     Query query = new Query("Event")
         .addSort("startTime", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
-      String startTime = (String) entity.getProperty("startTime");
-      event.addAll(getEvents(startTime));
+      try {
+        String idString = entity.getKey().getName();
+        UUID id = UUID.fromString(idString);
+        String title = (String) entity.getProperty("title");
+        String start = (String) entity.getProperty("startTime");
+        String end = (String) entity.getProperty("endTime");
+        String description = (String) entity.getProperty("description");
+        Event event = new Event(title, start, end, description);
+        events.add(event);
+      } catch (Exception e) {
+        System.err.println("Error reading message.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
     }
-    return event;
+    return events;
   }
   /** 
    *Stores the User in Datastore.

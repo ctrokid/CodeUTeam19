@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Handles fetching all messages for the public feed.
  */
-@WebServlet("/schedulefeed")
 public class MessageFeedServlet extends HttpServlet {
 
   private Datastore datastore;
@@ -34,11 +33,11 @@ public class MessageFeedServlet extends HttpServlet {
 
     response.setContentType("application/json");
 
+
     List<Event> events = datastore.getAllMessages();
-    //try calling calendar here
+
     Gson gson = new Gson();
     String json = gson.toJson(events);
-
-    response.getOutputStream().println(json + "\n");
+    response.getWriter().println(json);
   }
 }

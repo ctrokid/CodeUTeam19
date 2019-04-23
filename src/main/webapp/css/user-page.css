@@ -36,8 +36,24 @@
 
 /* Give the message body a margin so the text
    isn't too close to the border. */
-.message-body {
+.message-body1 {
   margin: 5px;
+}
+
+/* Give the message body a margin so the text
+   isn't too close to the border. */
+.message-body2 {
+    margin: 5px;
+}
+
+/* Give the message body a margin so the text
+   isn't too close to the border. */
+.message-body3 {
+    margin: 5px;
+}
+
+.message-space {
+    margin: 5px;
 }
 
 /* Use this to hide certain elements like forms if the

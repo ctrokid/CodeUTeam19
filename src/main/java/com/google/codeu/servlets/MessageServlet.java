@@ -20,6 +20,9 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.*;
 import com.google.gson.Gson;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +30,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 /** Handles fetching and saving {@link Message} instances. */
-@WebServlet("/schedule")
 public class MessageServlet extends HttpServlet {
 
 
@@ -49,15 +50,8 @@ public class MessageServlet extends HttpServlet {
 
     response.setContentType("application/json");
 
-    String user = request.getParameter("user");
 
-    if (user == null || user.equals("")) {
-      // Request is invalid, return empty array
-      response.getWriter().println("[]");
-      return;
-    }
-
-    List<Event> events = datastore.getEvents(user);
+    List<Event> events = datastore.getAllMessages();
 
     Gson gson = new Gson();
     String json = gson.toJson(events);
@@ -67,22 +61,27 @@ public class MessageServlet extends HttpServlet {
   /** Stores a new {@link Message}. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
       response.sendRedirect("/index.html");
       return;
     }
-    final String user = userService.getCurrentUser().getEmail();
-    String text = request.getParameter("text");
-    final String recipient = request.getParameter("recipient");
 
-    Message message = new Message(user, text, recipient);
-    //datastore.storeMessage(message);
+    String userEmail = userService.getCurrentUser().getEmail();
+    //Cleans the user input
+    String title = request.getParameter("field1");
+    String[] times = request.getParameter("field2").split("-");
+    String startTime = times[0];
+    String endTime = times[1];
+    String description = request.getParameter("field3");
 
-    testPostTask(text);
+    User user = new User(userEmail);
+    Event event = new Event(title, startTime, endTime,description);
+    datastore.storeUser(user);
+    datastore.storeEvent(event);
 
-    response.sendRedirect("/user-page.html?user=" + recipient);
+    response.sendRedirect("/user-page.html?user=" + userEmail);
+
   }
 
   //Read From InputText field to create a ScheduleItem

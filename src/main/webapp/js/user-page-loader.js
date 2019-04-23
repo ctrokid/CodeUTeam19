@@ -23,30 +23,6 @@ if (!parameterUsername) {
     window.location.replace('/');
 }
 
-/** Sets the page title based on the URL parameter username. */
-function setPageTitle() {
-    document.getElementById('page-title').innerText = parameterUsername;
-    document.title = parameterUsername + ' - User Page';
-}
-
-/**
- *Requests the users about me data and adds it to the page.
- */
-function fetchAboutMe(){
-    const url = '/about?user=' + parameterUsername;
-    fetch(url).then((response) => {
-        return response.text();
-}).then((aboutMe) => {
-        const aboutMeContainer = document.getElementById('about-me-container');
-    if(aboutMe == ''){
-        aboutMe = 'This user has not entered any information yet.';
-    }
-
-    aboutMeContainer.innerHTML = aboutMe;
-
-});
-}
-
 /**
  * Shows the message form if the user is logged in.
  */
@@ -57,68 +33,76 @@ function showMessageFormIfLoggedIn() {
 })
 .then((loginStatus) => {
         if (loginStatus.isLoggedIn) {
-        const messageForm = document.getElementById('message-form');
-        messageForm.action = '/messages?recipient=' + parameterUsername;
+        const messageForm = document.getElementById('id_1555739088231_637');
+        messageForm.action = '/user-page.html?user=' + parameterUsername;
         messageForm.classList.remove('hidden');
     }
 });
-    document.getElementById('about-me-form').classList.remove('hidden');
 }
 
 /** Fetches messages and add them to the page. */
 function fetchMessages() {
-    const url = '/about?user=' + parameterUsername;
-    fetch(url).then((response) => {
-        return response.text();
-    }).then((aboutMe) => {
-        const aboutMeContainer = document.getElementById('message-container');
-        if(aboutMe == ''){
-            aboutMe = 'No events created yet';
+    fetch('/messages').then((response) => {
+        return response.json();
+    }).then((events) => {
+        const messagesContainer = document.getElementById('message-container');
+        if (events.length == 0) {
+            messagesContainer.innerHTML = '<p>This user has no posts yet.</p>';
+        } else {
+            messagesContainer.innerHTML = '';
         }
-
-        aboutMeContainer.innerHTML = aboutMe;
-});
+        events.forEach((event) => {
+            const messageDiv = buildEventDiv(event);
+            messagesContainer.appendChild(messageDiv);
+        });
+    });
 }
 
 /**
- * Builds an element that displays the message.
- * @param {Message} message
+ * Builds an element that displays the event.
+ * @param {Message} event
  * @return {Element}
  */
-function buildMessageDiv(message) {
+function buildEventDiv(event) {
     const headerDiv = document.createElement('div');
     headerDiv.classList.add('message-header');
     headerDiv.appendChild(document.createTextNode(
-        message.user + ' - ' + new Date(message.timestamp)));
+        "Task: " + event.title ));
 
-    const bodyDiv = document.createElement('div');
-    bodyDiv.classList.add('message-body');
-    bodyDiv.innerHTML = message.text;
+    const startTimeDiv = document.createElement('div');
+    startTimeDiv.classList.add('message-body1');
+    startTimeDiv.appendChild(document.createTextNode(
+        "Start Time: " + event.startTime));
+
+    const endTimeDiv = document.createElement('div');
+    endTimeDiv.classList.add('message-body2');
+    endTimeDiv.appendChild(document.createTextNode(
+        "End Time: " + event.endTime));
+
+    const descriptionDiv = document.createElement('div');
+    descriptionDiv.classList.add('message-body3');
+    descriptionDiv.appendChild(document.createTextNode(
+        "Task Description: "
+        + event.description));
+
+    const spaceDiv = document.createElement('div');
+    spaceDiv.classList.add('message-space');
+    spaceDiv.appendChild(document.createTextNode(
+        " "));
 
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message-div');
     messageDiv.appendChild(headerDiv);
-    messageDiv.appendChild(bodyDiv);
+    messageDiv.appendChild(startTimeDiv);
+    messageDiv.appendChild(endTimeDiv);
+    messageDiv.appendChild(descriptionDiv);
+    messageDiv.appendChild(spaceDiv);
 
     return messageDiv;
 }
 
-function buildLanguageLinks(){
-    const userPageUrl = '/user-page.html?user=' + parameterUsername;
-    const languagesListElement  = document.getElementById('languages');
-    languagesListElement.appendChild(createListItem(createLink(
-        userPageUrl + '&language=en', 'English')));
-    languagesListElement.appendChild(createListItem(createLink(
-        userPageUrl + '&language=zh', 'Chinese')));
-    languagesListElement.appendChild(createListItem(createLink(
-        userPageUrl + '&language=hi', 'Hindi')));
-    languagesListElement.appendChild(createListItem(createLink(
-        userPageUrl + '&language=es', 'Spanish')));
-    languagesListElement.appendChild(createListItem(createLink(
-        userPageUrl + '&language=ar', 'Arabic')));
-}
-
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
+    showMessageFormIfLoggedIn()
     fetchMessages();
 }

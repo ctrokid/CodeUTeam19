@@ -11,7 +11,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet>
     <servlet-mapping>
         <servlet-name>scheduleServlet</servlet-name>
-        <url-pattern>/about</url-pattern>
+        <url-pattern>/schedule</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -75,7 +75,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet>
     <servlet-mapping>
         <servlet-name>messageFeedServlet</servlet-name>
-        <url-pattern>/schedulefeed</url-pattern>
+        <url-pattern>/messagefeed</url-pattern>
     </servlet-mapping>
 
     <servlet>
