@@ -1,7 +1,7 @@
 
 // Fetch messages and add them to the page.
 function fetchMessages(){
-    const url = '/feed';
+    const url = '/schedulefeed';
     fetch(url).then((response) => {
         return response.json();
     }).then((messages) => {
@@ -13,29 +13,29 @@ function fetchMessages(){
             messageContainer.innerHTML = '';
         }
         messages.forEach((message) => {
-            const messageDiv = buildMessageDiv(message);
+            const messageDiv = buildEventDiv(message);
             messageContainer.appendChild(messageDiv);
         });
     });
 }
 
-function buildMessageDiv(message){
+function buildEventDiv(event){
     const usernameDiv = document.createElement('div');
     usernameDiv.classList.add("left-align");
-    usernameDiv.appendChild(document.createTextNode(message.user));
+    usernameDiv.appendChild(document.createTextNode(event.title));
 
     const timeDiv = document.createElement('div');
     timeDiv.classList.add('right-align');
-    timeDiv.appendChild(document.createTextNode(new Date(message.timestamp)));
+    timeDiv.appendChild(document.createTextNode(event.startTime));
 
     const headerDiv = document.createElement('div');
     headerDiv.classList.add('message-header');
-    headerDiv.appendChild(usernameDiv);
-    headerDiv.appendChild(timeDiv);
+    headerDiv.appendChild(event.endTime);
+    headerDiv.appendChild(event.description);
 
     const bodyDiv = document.createElement('div');
     bodyDiv.classList.add('message-body');
-    bodyDiv.appendChild(document.createTextNode(message.text));
+    bodyDiv.appendChild(document.createTextNode(event.text));
 
     const messageDiv = document.createElement('div');
     messageDiv.classList.add("message-div");

@@ -24,7 +24,6 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,51 +68,48 @@ public class Datastore {
   //#region Messages
 
   /** Stores the Message in Datastore. */
-  public void storeMessage(Message message) {
-    Entity messageEntity = new Entity("Message", message.getId().toString());
-    messageEntity.setProperty("user", message.getUser());
-    messageEntity.setProperty("text", message.getText());
-    messageEntity.setProperty("timestamp", message.getTimestamp());
-    messageEntity.setProperty("recipient", message.getRecipient());
-    if (message.getImageUrl() != null) {
-      messageEntity.setProperty("imageUrl", message.getImageUrl());
-    }
-
-    datastore.put(messageEntity);
+  public void storeEvent(Event event) {
+    Entity eventEntity = new Entity("Event", event.getId().toString());
+    eventEntity.setProperty("title", event.getTitle());
+    eventEntity.setProperty("startTime", event.getStartTime());
+    eventEntity.setProperty("endTime", event.getEndTime());
+    eventEntity.setProperty("description", event.getDescription());
+    datastore.put(eventEntity);
   }
 
   /**
-   * Gets messages sent to {@code recipient}.
+   * Gets messages sent to {@code startTime}.
    *
-   * @return a list of messages sent to the recipient, or empty list if user has never posted a
+   * @return a list of messages sent to the startTime, or empty list if user has never posted a
    *     message. List is sorted by time descending.
    */
-  public List<Message> getMessages(String recipient) {
-    List<Message> messages = new ArrayList<>();
+  public List<Event> getEvents(String startTime) {
+
+    List<Event> events = new ArrayList<>();
 
     Query query =
-        new Query("Message")
-            .setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient))
-            .addSort("timestamp", SortDirection.DESCENDING);
+        new Query("Event")
+            .setFilter(new Query.FilterPredicate("startTime", FilterOperator.EQUAL, startTime))
+            .addSort("startTime", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
       try {
         String idString = entity.getKey().getName();
         UUID id = UUID.fromString(idString);
-        String user = (String) entity.getProperty("user");
-        String text = (String) entity.getProperty("text");
-        long timestamp = (long) entity.getProperty("timestamp");
-        String imageUrl = (String) entity.getProperty("imageUrl");
-        Message message = new Message(id, user, text, timestamp, recipient, imageUrl);
-        messages.add(message);
+        String title = (String) entity.getProperty("title");
+        String start = (String) entity.getProperty("startTime");
+        String end = (String) entity.getProperty("endTime");
+        String description = (String) entity.getProperty("description");
+        Event event = new Event(title, start, end, description);
+        events.add(event);
       } catch (Exception e) {
         System.err.println("Error reading message.");
         System.err.println(entity.toString());
         e.printStackTrace();
       }
     }
-    return messages;
+    return events;
   }
 
 
@@ -123,17 +119,30 @@ public class Datastore {
    * @return a list of messages posted, or empty list if user has never posted a
    *     message. List is sorted by user and time descending.
    */
-  public List<Message> getAllMessages() {
-    List<Message> messages = new ArrayList<>();
-    Query query = new Query("Message")
-        .addSort("user", SortDirection.DESCENDING);
+  public List<Event> getAllMessages() {
+    List<Event> events = new ArrayList<>();
+
+    Query query = new Query("Event")
+        .addSort("startTime", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
-      String user = (String) entity.getProperty("user");
-      messages.addAll(getMessages(user));
+      try {
+        String idString = entity.getKey().getName();
+        UUID id = UUID.fromString(idString);
+        String title = (String) entity.getProperty("title");
+        String start = (String) entity.getProperty("startTime");
+        String end = (String) entity.getProperty("endTime");
+        String description = (String) entity.getProperty("description");
+        Event event = new Event(title, start, end, description);
+        events.add(event);
+      } catch (Exception e) {
+        System.err.println("Error reading message.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
     }
-    return messages;
+    return events;
   }
   /** 
    *Stores the User in Datastore.
@@ -141,7 +150,7 @@ public class Datastore {
 
   /** Returns the total number of messages for all users. */
   public int getTotalMessageCount() {
-    Query query = new Query("Message");
+    Query query = new Query("Event");
     PreparedQuery results = datastore.prepare(query);
     return results.countEntities(FetchOptions.Builder.withLimit(1000));
   }
@@ -153,7 +162,7 @@ public class Datastore {
 
   /** Stores the ItemSchedule in Datastore. */
   public void storeItemSchedule(ItemSchedule itemSchedule) {
-
+/*
     String kind = "";
     if(itemSchedule instanceof Course) { kind = "Course"; }
     else if (itemSchedule instanceof Task) { kind = "Task"; }
@@ -161,7 +170,7 @@ public class Datastore {
 
     //Save ItemSchedule Properties
     Entity itemScheduleEntity = new Entity(kind, itemSchedule.getId().toString());
-    itemScheduleEntity.setProperty("creator",itemSchedule.getCreator());
+    itemScheduleEntity.setProperty("title",itemSchedule.getTitle());
     itemScheduleEntity.setProperty("startTime",itemSchedule.getStartTime());
     itemScheduleEntity.setProperty("endTime",itemSchedule.getEndTime());
     itemScheduleEntity.setProperty("description",itemSchedule.getDescription());
@@ -211,6 +220,8 @@ public class Datastore {
       }
     }
     datastore.put(itemScheduleEntity);
+
+ */
   }
 
   /**
@@ -220,11 +231,12 @@ public class Datastore {
    */
   public List<ItemSchedule> getItemSchedule(String user) {
     List<ItemSchedule> items = new ArrayList<>();
+    /*
     String [] kinds = {"Course","Event","Task"};
     for (int i = 0; i < kinds.length ; i++) {
       Query query =
           new Query(kinds[i]);
-              //.setFilter(new Query.FilterPredicate("creator", FilterOperator.EQUAL, user))
+              //.setFilter(new Query.FilterPredicate("title", FilterOperator.EQUAL, user))
               //.addSort("startTime", SortDirection.DESCENDING);
       PreparedQuery results = datastore.prepare(query);
       for (Entity entity : results.asIterable()) {
@@ -232,9 +244,9 @@ public class Datastore {
           //ItemSchedule
           String idString = entity.getKey().getName();
           UUID id = UUID.fromString(idString);
-          String creator = (String) entity.getProperty("creator");
-          long startTime = (long) entity.getProperty("startTime");
-          long endTime = (long) entity.getProperty("endTime");
+          String creator = (String) entity.getProperty("title");
+          Object startTime = entity.getProperty("startTime");
+          Object endTime = entity.getProperty("endTime");
           String description = (String) entity.getProperty("description");
 
           //Location
@@ -302,6 +314,8 @@ public class Datastore {
         }
       }
     }
+*/
+
     return items;
   }
 
@@ -354,5 +368,5 @@ public class Datastore {
   }
 
   //endregion
-  
+
 }

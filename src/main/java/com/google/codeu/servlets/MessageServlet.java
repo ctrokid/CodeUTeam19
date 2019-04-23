@@ -20,17 +20,16 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.*;
 import com.google.gson.Gson;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
-
 /** Handles fetching and saving {@link Message} instances. */
 public class MessageServlet extends HttpServlet {
 
@@ -51,47 +50,45 @@ public class MessageServlet extends HttpServlet {
 
     response.setContentType("application/json");
 
-    String user = request.getParameter("user");
 
-    if (user == null || user.equals("")) {
-      // Request is invalid, return empty array
-      response.getWriter().println("[]");
-      return;
-    }
-
-    List<Message> messages = datastore.getMessages(user);
+    List<Event> events = datastore.getAllMessages();
 
     Gson gson = new Gson();
-    String json = gson.toJson(messages);
+    String json = gson.toJson(events);
     response.getWriter().println(json);
   }
 
   /** Stores a new {@link Message}. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
       response.sendRedirect("/index.html");
       return;
     }
-    final String user = userService.getCurrentUser().getEmail();
-    String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
-    final String recipient = request.getParameter("recipient");
 
-    Message message = new Message(user, text, recipient);
-    datastore.storeMessage(message);
+    String userEmail = userService.getCurrentUser().getEmail();
+    //Cleans the user input
+    String title = request.getParameter("field1");
+    String[] times = request.getParameter("field2").split("-");
+    String startTime = times[0];
+    String endTime = times[1];
+    String description = request.getParameter("field3");
 
-    testPostTask(text);
+    User user = new User(userEmail);
+    Event event = new Event(title, startTime, endTime,description);
+    datastore.storeUser(user);
+    datastore.storeEvent(event);
 
-    response.sendRedirect("/user-page.html?user=" + recipient);
+    response.sendRedirect("/user-page.html?user=" + userEmail);
+
   }
 
   //Read From InputText field to create a ScheduleItem
   private void testPostTask(String line) {
     String[] split = line.split(" ");
-    long startTime = Long.parseLong(split[1]);
-    long endTime = Long.parseLong(split[2]);
+    String startTime = split[1];
+    String endTime = split[2];
     String description = split[3];
 
     String loc_Title = split[4];
@@ -120,6 +117,7 @@ public class MessageServlet extends HttpServlet {
 
       datastore.storeItemSchedule(course);
     }
+    /*
     //Event || Task
     else {
       int priorityLevel = Integer.parseInt(split[9]);
@@ -144,7 +142,9 @@ public class MessageServlet extends HttpServlet {
 
         datastore.storeItemSchedule(task);
       }
-    }
+
+     */
+   // }
   }
 
 }

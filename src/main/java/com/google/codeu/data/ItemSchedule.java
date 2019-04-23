@@ -4,17 +4,17 @@ import java.util.UUID;
 
 public abstract class ItemSchedule {
   protected UUID id;
-  protected long startTime;
-  protected long endTime;
+  protected String startTime;
+  protected String endTime;
   protected String description;
   protected Location location;
-  protected String creator;
+  protected String title;
 
-  public long getStartTime() {
+  public String getStartTime() {
     return startTime;
   }
 
-  public long getEndTime() {
+  public String getEndTime() {
     return endTime;
   }
 
@@ -28,13 +28,13 @@ public abstract class ItemSchedule {
 
   public UUID getId() { return id; }
 
-  public String getCreator() { return creator; }
+  public String getTitle() { return title; }
 
-  public void setStartTime(long startTime) {
+  public void setStartTime(String startTime) {
     this.startTime = startTime;
   }
 
-  public void setEndTime(long endTime) {
+  public void setEndTime(String endTime) {
     this.endTime = endTime;
   }
 

@@ -1,51 +1,38 @@
 package com.google.codeu.data;
 
-import java.util.List;
 import java.util.UUID;
 
 public class Event extends ItemSchedule {
-  private int priorityLevel;
-  private List<User> collaborators;
 
   /**
    * Create a new Event.
    * @param startTime the start time of the event
    * @param endTime the end time of the event
-   * @param priorityLevel the priority level of the event
+   * @param description the priority level of the event
    */
-  public Event(String creator, long startTime, long endTime, int priorityLevel) {
-    this.creator = creator;
+  public Event(String title, String startTime, String endTime, String description) {
+    this.title = title;
     this.id = UUID.randomUUID();
     this.startTime = startTime;
     this.endTime = endTime;
-    this.priorityLevel = priorityLevel;
-    description = "";
+    this.description = description;
   }
 
-  public Event(String creator, UUID id, long startTime, long endTime, int priorityLevel) {
-    this.creator = creator;
-    this.id = id;
-    this.startTime = startTime;
-    this.endTime = endTime;
-    this.priorityLevel = priorityLevel;
-    description = "";
+  public String getTitle(){
+    return this.title;
   }
 
-  public int getPriorityLevel() {
-    return priorityLevel;
+  public String getStartTime(){
+    return this.startTime;
   }
 
-  public List<User> getCollaborators() {
-    return collaborators;
+  public String getEndTime(){
+    return this.endTime;
   }
 
-  public void setPriorityLevel(int priorityLevel) {
-    this.priorityLevel = priorityLevel;
+  public String getDescription(){
+    return this.description;
   }
 
-  public void setCollaborators(List<User> collaborators) {
-    this.collaborators = collaborators;
-  }
-  
 
 }

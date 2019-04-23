@@ -6,12 +6,12 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
 
     <servlet>
-        <servlet-name>aboutMeServlet</servlet-name>
-        <servlet-class>com.google.codeu.servlets.AboutMeServlet</servlet-class>
+        <servlet-name>scheduleServlet</servlet-name>
+        <servlet-class>com.google.codeu.servlets.ScheduleServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>aboutMeServlet</servlet-name>
-        <url-pattern>/about</url-pattern>
+        <servlet-name>scheduleServlet</servlet-name>
+        <url-pattern>/schedule</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -75,7 +75,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     </servlet>
     <servlet-mapping>
         <servlet-name>messageFeedServlet</servlet-name>
-        <url-pattern>/feed</url-pattern>
+        <url-pattern>/messagefeed</url-pattern>
     </servlet-mapping>
 
     <servlet>

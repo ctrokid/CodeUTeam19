@@ -10,8 +10,8 @@ public class Course extends ItemSchedule {
   private String grade;
   private List<Assignment> assignments;
 
-  public Course(String creator, UUID id, long startTime, long endTime) {
-    this.creator = creator;
+  public Course(String creator, UUID id, String startTime, String endTime) {
+    this.title = creator;
     this.id = id;
     this.startTime = startTime;
     this.endTime = endTime;
@@ -22,8 +22,8 @@ public class Course extends ItemSchedule {
     grade = "";
   }
 
-  public Course(String creator, long startTime, long endTime) {
-    this.creator = creator;
+  public Course(String creator, String startTime, String endTime) {
+    this.title = creator;
     this.id = UUID.randomUUID();
     this.startTime = startTime;
     this.endTime = endTime;

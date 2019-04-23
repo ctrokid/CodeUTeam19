@@ -24,7 +24,8 @@ public class ScheduleManager {
 
   //TODO this should return a calandar API compatible event
   public Event exportScheduleToGoogleCalendar(){
-    Event calendarEvent = new Event("", 0, 0, 0);
+    Event calendarEvent = new Event("",
+            "", "", "");
     return calendarEvent;
   }
 
